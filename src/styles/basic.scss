@@ -1,0 +1,23 @@
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: $primary;
+    color: $light;
+
+    svg {
+        fill: $light;
+        ;
+    }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+.icon {
+    width: 12px;
+    height: 12px;
+}

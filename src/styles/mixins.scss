@@ -1,0 +1,56 @@
+@mixin flexcenter() {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin defaultcenter() {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+}
+
+@mixin button() {
+    padding: 12px 14px 12px 16px;
+    background: $light;
+    color: $primary;
+    min-width: 224px;
+    @include flexcenter;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.25s;
+
+    span {
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 500;
+
+        @media only screen and (max-width: 1366px) {
+            font-size: 12px;
+        }
+    }
+
+    svg {
+        width: 18px;
+        height: 16px;
+        fill: $primary;
+
+        @media only screen and (max-width: 1366px) {
+            font-size: 16px;
+            height: 14px;
+        }
+    }
+
+    &:hover {
+        background: $action;
+    }
+
+    @media only screen and (max-width: 1366px) {
+        padding: 10px 14px;
+    }
+}

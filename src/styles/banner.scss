@@ -1,0 +1,13 @@
+.banner {
+    min-height: 340px;
+    position: relative;
+    background-image: url('../assets//images/main-bg.webp');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: top;
+
+    &-text {
+        @include defaultcenter;
+        top: 44%;
+    }
+}
