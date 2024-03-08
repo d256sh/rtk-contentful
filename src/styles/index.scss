@@ -1,18 +1,7 @@
-@import url('./reset.scss');
-
-.app {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-
-.icon {
-    width: 12px;
-    height: 12px;
-}
+@import './variables.scss';
+@import './mixins.scss';
+@import './reset.scss';
+@import './basic.scss';
+@import './header.scss';
+@import './banner.scss';
+@import './tour.scss';
