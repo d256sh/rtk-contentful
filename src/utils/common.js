@@ -23,7 +23,7 @@ export const getLocaleDateString = (
   date,
   { month = "numeric", day = "numeric", year = "numeric" }
 ) =>
-  new Date(date).toLocaleDateString("ru-RU", {
+  new Date(date).toLocaleDateString("ua", {
     month,
     day,
     year,

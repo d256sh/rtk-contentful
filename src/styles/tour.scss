@@ -1,3 +1,9 @@
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .tour {
     padding: 20px 0;
 
@@ -56,6 +62,7 @@
 
     &-list {
         margin-top: 20px;
+        padding-inline: 0;
     }
 
     &-banner {
