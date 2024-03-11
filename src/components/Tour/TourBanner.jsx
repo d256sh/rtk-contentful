@@ -8,12 +8,7 @@ const TourBanner = () => {
   return (
     <Section className="tour-banner">
       <div style={{ overflow: "hidden" }} className="container">
-        <video
-          style={{ scale: "1..26", filter: "blur(1px) contrast(300%)" }}
-          loop
-          muted
-          autoPlay
-        >
+        <video style={{ scale: "1.26", filter: "contrast(500%)" }} loop muted autoPlay>
           <source src={video} type="video/webm" />
         </video>
       </div>
