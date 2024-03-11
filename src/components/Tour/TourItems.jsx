@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTourItems } from "../../reducers/tourReducer";
 import TourItem from "./TourItem";
 import { sortByDate } from "../../utils/common";
+import Loading from "../Loader.jsx";
 
 const TourItems = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const TourItems = () => {
       <div className="container">
         <Title text="List" />
         {isLoading ? (
-          "LOADING"
+          <Loading />
         ) : (
           <ul className="tour-list">
             {filtered.map((item, i) => (
