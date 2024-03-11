@@ -13,8 +13,6 @@ export const getTourItems = createAsyncThunk(
     try {
       const data = await request(tourItemCollectionQuery);
 
-      console.log("data", data);
-
       const { items } = data.tourItemCollection;
 
       return items;
