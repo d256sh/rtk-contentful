@@ -3,7 +3,7 @@ import Section from "./Section/Section";
 import { Link } from "react-router-dom";
 import ScrollAnimation from "react-animate-on-scroll";
 import logo from "../assets/images/handwhite.png";
-import x from "../assets/images/x.png";
+import x from "../assets/images/xx.png";
 
 const footerBanner = () => {
   return (
@@ -31,7 +31,11 @@ const footerBanner = () => {
               animateOut="fadeOutRight"
               className="footer-banner__image"
             >
-              <img style={{ height: "400px" }} src={x} alt="XXX" />
+              <img
+                style={{ height: "400px", filter: "brightness(130%) contrast(130%)" }}
+                src={x}
+                alt="XXX"
+              />
             </ScrollAnimation>
           </Link>
         </div>
