@@ -83,8 +83,12 @@ const Tracks = () => {
           </div>
         )}
 
-        <Link to="/tracks" className="button-more">
-          All Tracks
+        <Link
+          style={{ zIndex: 20, color: "white", fontSize: "24px" }}
+          to="/tracks"
+          className="button-more"
+        >
+          All Tracks {">"}
         </Link>
       </div>
     </Section>
