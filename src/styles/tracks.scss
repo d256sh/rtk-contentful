@@ -27,8 +27,8 @@
         grid-template-rows: max-content;
         justify-content: center;
         grid-template-areas:
-          "image"
           "info"
+          "image"
           "button";
       }
 
@@ -119,7 +119,7 @@
   grid-template-columns: 300px 1fr;
   grid-template-areas:
     "image date"
-    "title .";
+    "image title ";
   max-width: 100%;
 
   @media only screen and (max-width: 750px) {
@@ -147,7 +147,7 @@
         grid-template-columns: 1fr 300px;
         grid-template-areas:
           "date image"
-          ". title";
+          "title image";
 
         @media only screen and (max-width: 1366px) {
           grid-template-columns: 1fr 200px;
@@ -198,18 +198,12 @@
     font-weight: 400;
     font-size: 24px;
     line-height: 125%;
-    position: absolute;
+    position: relative;
     grid-area: title;
-    top: 100%;
-    z-index: 2;
+    top: 0;
 
     @media only screen and (max-width: 1366px) {
       font-size: 18px;
-    }
-
-    @media only screen and (max-width: 750px) {
-      position: relative;
-      top: 0;
     }
   }
 }
