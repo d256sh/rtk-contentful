@@ -1,9 +1,13 @@
+html {
+    background: $primary;
+    color: $light;
+}
+
 .app {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: $primary;
-    color: $light;
+
 
     svg {
         fill: $light;
@@ -17,11 +21,11 @@
 }
 
 .title {
-    color: red;
     font-size: large;
     line-height: 2rem;
     text-align: center;
     height: fit-content;
+    padding-left: 13px;
 }
 
 

@@ -177,11 +177,13 @@
     }
 
     .icon {
-      &-pause {
-        width: 15px;
-        height: 15px;
-        fill: $light;
-      }
+      @include defaultcenter;
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      fill: $light;
+      top: 10%;
+      left: 10%;
     }
   }
 
