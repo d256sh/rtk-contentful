@@ -66,7 +66,11 @@ const Tracks = () => {
                     <div className="track" onClick={() => handleTrackClick(track)}>
                       <div className="track-image">
                         <img src={cover.url} alt={title} />
-                        {!!playing ? <Icon name="pause" /> : <Icon name="play" />}
+                        {!!playing && currentTrack.sys.id === id ? (
+                          <Icon name="pause" />
+                        ) : (
+                          <Icon name="play" />
+                        )}
                       </div>
                       <p className="track-date">
                         {getLocaleDateString(date, { month: "short" })}
