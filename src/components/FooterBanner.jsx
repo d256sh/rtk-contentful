@@ -32,7 +32,7 @@ const footerBanner = () => {
               className="footer-banner__image"
             >
               <img
-                style={{ height: "400px", filter: "brightness(130%) contrast(130%)" }}
+                style={{ maxHeight: "400px", filter: "brightness(130%) contrast(130%)" }}
                 src={x}
                 alt="XXX"
               />
