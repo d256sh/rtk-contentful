@@ -57,7 +57,8 @@
         }
 
         &:before {
-            background: url("../assets/images/effect.webp") no-repeat center/contain;
+            background-image: url("../assets/images/effect.webp");
+
             @include defaultcenter;
         }
 
