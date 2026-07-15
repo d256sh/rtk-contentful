@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import Section from "./Section/Section";
 
 const Banner = () => {
@@ -10,7 +11,14 @@ const Banner = () => {
           {/* <video className="banner-video" width="100%" height="auto" loop muted autoPlay>
             <source src={video} type="video/webm" />
           </video> */}
-          <p className="banner-text">banner text</p>
+          <motion.p
+            className="banner-text"
+            initial={{ opacity: 0, letterSpacing: "0.6em" }}
+            animate={{ opacity: 1, letterSpacing: "0.3em" }}
+            transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.3 }}
+          >
+            banner text
+          </motion.p>
         </div>
       </div>
     </Section>

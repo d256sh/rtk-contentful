@@ -1,50 +1,76 @@
 .header {
-    z-index: 2;
+    z-index: 100;
+    position: sticky;
+    top: 0;
+    @include glass(rgba(5, 5, 8, 0.75), rgba(255, 255, 255, 0.06), 24px);
+    transition: background $transition-base;
 }
 
 header {
-    padding-top: 20px;
-    padding-inline: 10px;
+    padding: 16px 0;
     display: grid;
     grid-template-columns: 1fr max-content 1fr;
     justify-content: space-between;
     align-items: center;
 
     @media only screen and (max-width: 750px) {
-        padding-top: 10px;
+        padding: 10px 0;
     }
 
     .logo {
         @media only screen and (max-width: 750px) {
             width: 32px;
         }
+
+        a {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            @include gradient-text;
+            transition: opacity $transition-fast;
+
+            &:hover {
+                opacity: 0.8;
+            }
+        }
     }
 }
 
 .socials {
     @include flexcenter;
-    column-gap: 10px;
+    column-gap: 12px;
     justify-content: flex-end;
 
     svg {
-        fill: $light;
-        width: 16px;
-        height: 16px;
-        transition: fill 0.25s ease;
+        fill: $grey;
+        width: 18px;
+        height: 18px;
+        transition: fill $transition-fast, transform $transition-fast;
     }
 
     &-item {
         &:hover {
             svg {
                 fill: $action;
+                transform: translateY(-2px);
             }
         }
     }
 }
 
+nav {
+    @include flexcenter;
+    column-gap: 24px;
+
+    @media only screen and (max-width: 750px) {
+        display: none;
+    }
+}
+
 .menu {
     @include flexcenter;
-    column-gap: 16px;
+    column-gap: 24px;
 
     &-mobile {
         margin-left: auto;
@@ -67,13 +93,13 @@ header {
         &__list {
             position: fixed;
             width: 100%;
-            height: max-content;
             left: 0;
             top: 0;
             background: $primary;
             height: 100vh;
             transform: translateX(100vw);
-            transition: transform 0.75s ease-in-out;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 200;
 
             &.opened {
                 transform: translateX(0);
@@ -121,15 +147,34 @@ header {
 
     &-item {
         a {
-            color: $light;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
-            transition: color 0.25s ease;
+            letter-spacing: 0.08em;
+            transition: color $transition-fast;
+            position: relative;
+            padding-bottom: 4px;
+
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: $gradient-accent;
+                border-radius: 1px;
+                transition: width $transition-base;
+            }
 
             &:hover,
             &.active {
-                color: $action;
+                color: $light;
+
+                &::after {
+                    width: 100%;
+                }
             }
         }
     }

@@ -1,9 +1,22 @@
 import React from "react";
+import { motion } from "framer-motion";
 import Logo from "../Logo";
 import { MENU } from "../../utils/constants";
-import ScrollAnimation from "react-animate-on-scroll";
 import { NavLink } from "react-router-dom";
 import Socials from "../Socials/Socials";
+
+const menuItemVariants = {
+  hidden: { opacity: 0, y: -12 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.08,
+      duration: 0.4,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  }),
+};
 
 const Header = () => {
   return (
@@ -13,15 +26,16 @@ const Header = () => {
           <Logo />
           <nav>
             {MENU.map(({ link, name }, i) => (
-              <ScrollAnimation
+              <motion.div
                 key={link}
                 className="menu-item"
-                animateIn="fadeInDown"
-                offset={0}
-                dalay={i * 100}
+                custom={i}
+                initial="hidden"
+                animate="visible"
+                variants={menuItemVariants}
               >
                 <NavLink to={`/${link}`}>{name}</NavLink>
-              </ScrollAnimation>
+              </motion.div>
             ))}
           </nav>
           <Socials />

@@ -2,21 +2,17 @@ export const MAIN_URL = `https://graphql.contentful.com/content/v1/spaces/${proc
 
 export const MENU = [
   {
-    name: "Concerts",
-    link: "tour",
-  },
-  {
     name: "Music",
     link: "#tracks",
   },
   {
-    name: "News",
-    link: "news",
+    name: "Last Concerts",
+    link: "tour",
   },
   {
-    name: "Store",
-    link: "store",
-  },
+    name: "Last News",
+    link: "news",
+  }
 ];
 
 export const SOCIALS = [

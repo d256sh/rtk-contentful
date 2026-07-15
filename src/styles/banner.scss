@@ -1,56 +1,83 @@
 .banner {
-    min-height: 340px;
+    min-height: 420px;
     position: relative;
     background-image: url('../assets//images/main-bg.webp');
     background-repeat: no-repeat;
-    background-size: contain;
-    background-position: top;
+    background-size: cover;
+    background-position: center top;
+    border-radius: 0 0 $radius-xl $radius-xl;
+    overflow: hidden;
+
+    // Dark overlay gradient
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg,
+                rgba(5, 5, 8, 0.3) 0%,
+                rgba(5, 5, 8, 0.6) 60%,
+                $primary 100%);
+        z-index: 1;
+    }
 
     &-text {
         @include defaultcenter;
         top: 44%;
+        z-index: 2;
+        font-size: clamp(1rem, 3vw, 1.5rem);
+        font-weight: 300;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+        text-shadow: 0 0 40px rgba(255, 166, 0, 0.3);
     }
 
+    @media only screen and (max-width: 750px) {
+        min-height: 280px;
+    }
 }
 
 
 .footer {
 
-
     &-banner {
         width: 100%;
-        height: 336px;
-        padding-left: 24px;
+        min-height: 380px;
+        padding: 40px 24px;
         align-items: center;
         display: flex;
         position: relative;
         overflow: hidden;
+        border-radius: $radius-xl;
+        transition: transform $transition-base, box-shadow $transition-base;
+        @include glass(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.06), 16px);
+
+
+        .footer-banner__logo img {
+            transform: scaleX(-1);
+        }
 
         @media only screen and (max-width: 1366px) {
-            height: 215px;
+            min-height: 260px;
         }
 
         @media only screen and (max-width: 750px) {
             align-items: flex-end;
             justify-content: center;
             text-align: center;
+            padding: 24px;
+            min-height: 300px;
         }
 
-        &:hover {
-            &:after {
-                opacity: 1;
-            }
 
-            .footer-logo {
-                transform: rotate(180deg);
-            }
-        }
 
         &__section {
-            margin-top: 200px;
+            margin-top: 100px;
+            padding-bottom: 80px;
 
             @media only screen and (max-width: 1366px) {
                 margin-top: 50px;
+                padding-bottom: 40px;
             }
         }
 
@@ -63,7 +90,6 @@
             @media only screen and (max-width: 1366px) {
                 min-height: 320px;
             }
-
         }
 
         &__text {
@@ -75,12 +101,14 @@
 
         &__subtitle {
             color: $grey;
-            font-size: 24px;
-            font-weight: 900;
+            font-size: 20px;
+            font-weight: 700;
             line-height: 32px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
 
             @media only screen and (max-width: 1366px) {
-                font-size: 18px;
+                font-size: 16px;
                 line-height: 125%;
             }
 
@@ -91,27 +119,29 @@
 
         &__title {
             color: $light;
-            font-size: 70px;
+            font-size: 64px;
             font-weight: 900;
-            line-height: 125%;
-            margin-top: 32px;
+            line-height: 1.1;
+            margin-top: 16px;
+            letter-spacing: -0.02em;
 
             @media only screen and (max-width: 1366px) {
-                font-size: 50px;
-                margin-top: 16px;
+                font-size: 48px;
+                margin-top: 12px;
             }
 
             @media only screen and (max-width: 750px) {
-                font-size: 38px;
-                margin-top: 0px;
+                font-size: 36px;
+                margin-top: 8px;
             }
         }
 
         &__image {
             position: absolute;
-            right: 10%;
+            right: 8%;
             bottom: -23px;
             z-index: 2;
+            transition: transform $transition-slow;
 
             @media only screen and (max-width: 1366px) {
                 right: 3%;
@@ -125,6 +155,8 @@
             }
 
             img {
+                transition: transform $transition-slow;
+
                 @media only screen and (max-width: 1366px) {
                     width: 300px;
                 }
@@ -146,8 +178,9 @@
             z-index: 1;
 
             img {
-                transition: transform 1s ease-in-out;
+                transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
                 transform: rotate(0);
+                opacity: 0.6;
             }
 
             @media only screen and (max-width: 1366px) {

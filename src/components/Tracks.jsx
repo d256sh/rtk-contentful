@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ScrollAnimation from "react-animate-on-scroll";
+import { motion } from "framer-motion";
 
 import Section from "./Section/Section";
 import SectionTitle from "./Title";
@@ -10,6 +10,20 @@ import Loader from "./Loader";
 import { getLocaleDateString } from "../utils/common";
 
 import { useTrackItems } from "../hooks/useTrackItems";
+
+const trackVariants = {
+  hidden: { opacity: 0, scale: 0.92, y: 30 },
+  visible: (i) => ({
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.15,
+      duration: 0.55,
+      ease: [0.4, 0, 0.2, 1],
+    },
+  }),
+};
 
 const Tracks = () => {
   const { items = [], isLoading } = useTrackItems();
@@ -48,7 +62,7 @@ const Tracks = () => {
           <div className="tracks">
             {items
               .filter((_, i) => i < 3)
-              .map((track) => {
+              .map((track, i) => {
                 const {
                   cover,
                   title,
@@ -57,11 +71,14 @@ const Tracks = () => {
                 } = track;
 
                 return (
-                  <ScrollAnimation
+                  <motion.div
                     key={id}
                     className="track-item"
-                    animateIn="fadeInLeft"
-                    animateOut="fadeOutRight"
+                    custom={i}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={trackVariants}
                   >
                     <div className="track" onClick={() => handleTrackClick(track)}>
                       <div className="track-image">
@@ -77,14 +94,13 @@ const Tracks = () => {
                       </p>
                       <h3 className="track-title">{title}</h3>
                     </div>
-                  </ScrollAnimation>
+                  </motion.div>
                 );
               })}
           </div>
         )}
 
         <Link
-          style={{ zIndex: 20, color: "white", fontSize: "24px" }}
           to="/tracks"
           className="button-more"
         >

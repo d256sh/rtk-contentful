@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Section from "../Section/Section";
 
 import video from "../../assets/videos/XM.webm";
+
 const TourBanner = () => {
   return (
     <Section className="tour-banner">
-      <div style={{ overflow: "hidden" }} className="container">
+      <div className="container">
         <video
-          style={{ scale: "1", filter: "contrast(500%)", cursor: "pointer" }}
+          style={{ filter: "contrast(200%)" }}
           controls
         >
           <source src={video} type="video/webm" />

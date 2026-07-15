@@ -7,29 +7,86 @@ html {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: $gradient-dark;
+    font-family: $font-family;
+    position: relative;
 
+    // Subtle noise texture overlay
+    &::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+    }
 
     svg {
         fill: $light;
-        ;
     }
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
+    padding-inline: 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .title {
-    font-size: large;
-    line-height: 2rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
     text-align: center;
-    height: fit-content;
-    padding-left: 13px;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    @include gradient-text;
+    padding: 0;
 }
 
-
 .icon {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
+    transition: fill $transition-fast, transform $transition-fast;
+}
+
+.button-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    padding: 14px 28px;
+    color: $action;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(255, 166, 0, 0.3);
+    border-radius: $radius-md;
+    transition: all $transition-base;
+    position: relative;
+    overflow: hidden;
+    z-index: 20;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: $gradient-accent;
+        opacity: 0;
+        transition: opacity $transition-base;
+        z-index: -1;
+    }
+
+    &:hover {
+        color: $primary;
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(255, 166, 0, 0.3);
+
+        &::before {
+            opacity: 1;
+        }
+    }
 }
