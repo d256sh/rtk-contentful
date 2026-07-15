@@ -3,16 +3,16 @@ import Banner from "../components/Banner";
 import TourItems from "../components/Tour/TourItems";
 import TourBanner from "../components/Tour/TourBanner";
 import Tracks from "../components/Tracks";
-import ShopBanner from "../components/FooterBanner";
+import FooterBanner from "../components/FooterBanner";
 
 const Home = () => {
   return (
     <main className="main">
       <Banner />
-      <TourItems />
       <TourBanner />
+      <TourItems />
       <Tracks />
-      <ShopBanner />
+      <FooterBanner />
     </main>
   );
 };
