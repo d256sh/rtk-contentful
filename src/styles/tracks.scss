@@ -498,11 +498,28 @@
 
   &__main {
     min-width: 0;
+  }
 
-    input {
+  &__timeline {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 34px;
+    align-items: center;
+    gap: 8px;
+    margin-top: 7px;
+
+    > span {
+      color: $grey;
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+
+      &:last-child {
+        text-align: right;
+      }
+    }
+
+    > input {
       width: 100%;
       height: 4px;
-      margin-top: 10px;
       cursor: pointer;
       accent-color: $action;
     }
@@ -571,6 +588,15 @@
 
     &__title {
       font-size: 11px;
+    }
+
+    &__timeline {
+      grid-template-columns: 28px minmax(0, 1fr) 28px;
+      gap: 5px;
+
+      > span {
+        font-size: 9px;
+      }
     }
 
     &__controls {

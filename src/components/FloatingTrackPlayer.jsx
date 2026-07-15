@@ -2,6 +2,14 @@ import React from "react";
 import Icon from "./Icon";
 import { useSoundCloudPlayer } from "./SoundCloudPlayerProvider";
 
+const formatTime = (milliseconds) => {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = String(totalSeconds % 60).padStart(2, "0");
+
+  return `${minutes}:${seconds}`;
+};
+
 const FloatingTrackPlayer = () => {
   const {
     currentTrack,
@@ -38,15 +46,19 @@ const FloatingTrackPlayer = () => {
         >
           {currentTrack.title}
         </a>
-        <input
-          type="range"
-          min="0"
-          max={duration}
-          step="100"
-          value={Math.min(currentTime, duration)}
-          aria-label="Track progress"
-          onChange={({ target }) => seekTo(Number(target.value))}
-        />
+        <div className="floating-player__timeline">
+          <span>{formatTime(currentTime)}</span>
+          <input
+            type="range"
+            min="0"
+            max={duration}
+            step="100"
+            value={Math.min(currentTime, duration)}
+            aria-label="Track progress"
+            onChange={({ target }) => seekTo(Number(target.value))}
+          />
+          <span>{formatTime(duration)}</span>
+        </div>
       </div>
 
       <div className="floating-player__controls">
