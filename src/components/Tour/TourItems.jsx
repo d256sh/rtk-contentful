@@ -25,7 +25,7 @@ const TourItems = () => {
   return (
     <Section className="tour">
       <div className="container">
-        <Title text="List" />
+        <Title text="Past Tours" />
         {isLoading ? (
           <Loading />
         ) : (
