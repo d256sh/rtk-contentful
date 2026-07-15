@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 
 import { getLocaleDateString } from "../../utils/common";
-import YouTubePlayer from "../YouTubePlayer";
 
 const TourItem = ({
   date,
@@ -15,6 +14,13 @@ const TourItem = ({
   onPlayVideo,
 }) => {
   const setlist = setlistCollection?.items ?? [];
+  const setlistVideos = setlist
+    .filter((track) => track.videoLink)
+    .map((track) => ({
+      id: track.sys.id,
+      url: track.videoLink,
+      title: track.title,
+    }));
 
   return (
     <motion.li
@@ -38,15 +44,24 @@ const TourItem = ({
             {city}
             {country && `, ${country}`}
           </p>
-        </div>
 
-        {videoLink && (
-          <YouTubePlayer
-            url={videoLink}
-            title={`${place} concert video`}
-            className="tour-item__concert-video"
-          />
-        )}
+          {videoLink && (
+            <button
+              type="button"
+              className="tour-item__play"
+              onClick={() =>
+                onPlayVideo([
+                  {
+                    url: videoLink,
+                    title: `${place} concert`,
+                  },
+                ])
+              }
+            >
+              Play concert
+            </button>
+          )}
+        </div>
 
         {!!setlist.length && (
           <div className="tour-item__setlist">
@@ -64,10 +79,12 @@ const TourItem = ({
                       type="button"
                       className="tour-item__play"
                       onClick={() =>
-                        onPlayVideo({
-                          url: track.videoLink,
-                          title: track.title,
-                        })
+                        onPlayVideo(
+                          setlistVideos,
+                          setlistVideos.findIndex(
+                            (video) => video.id === track.sys.id
+                          )
+                        )
                       }
                     >
                       Play video

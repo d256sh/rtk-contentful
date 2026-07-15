@@ -2,7 +2,14 @@ import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import YouTubePlayer from "./YouTubePlayer";
 
-const VideoModal = ({ video, onClose }) => {
+const VideoModal = ({
+  video,
+  position,
+  total,
+  onPrevious,
+  onNext,
+  onClose,
+}) => {
   useEffect(() => {
     if (!video) {
       return undefined;
@@ -12,6 +19,10 @@ const VideoModal = ({ video, onClose }) => {
     const handleKeyDown = ({ key }) => {
       if (key === "Escape") {
         onClose();
+      } else if (total > 1 && key === "ArrowLeft") {
+        onPrevious();
+      } else if (total > 1 && key === "ArrowRight") {
+        onNext();
       }
     };
 
@@ -22,7 +33,7 @@ const VideoModal = ({ video, onClose }) => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [video, onClose]);
+  }, [video, total, onPrevious, onNext, onClose]);
 
   if (!video) {
     return null;
@@ -45,7 +56,37 @@ const VideoModal = ({ video, onClose }) => {
       >
         <div className="video-modal__header">
           <h2 id="video-modal-title">{video.title}</h2>
-          <button type="button" onClick={onClose} aria-label="Close video">
+
+          <div className="video-modal__controls">
+            {total > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={onPrevious}
+                  aria-label="Previous setlist video"
+                >
+                  ←
+                </button>
+                <span>
+                  {position} / {total}
+                </span>
+                <button
+                  type="button"
+                  onClick={onNext}
+                  aria-label="Next setlist video"
+                >
+                  →
+                </button>
+              </>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="video-modal__close"
+            onClick={onClose}
+            aria-label="Close video"
+          >
             ×
           </button>
         </div>

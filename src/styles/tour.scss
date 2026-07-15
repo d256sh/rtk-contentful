@@ -183,10 +183,6 @@
             }
         }
 
-        &__concert-video {
-            margin-top: 24px;
-        }
-
         &__setlist {
             margin-top: 24px;
             padding-top: 24px;
@@ -290,7 +286,7 @@
     backdrop-filter: blur(8px);
 
     &__dialog {
-        width: min(960px, 100%);
+        width: min(1200px, 100%);
         padding: 20px;
         @include glass(rgba(10, 10, 18, 0.95), $glass-border, 24px);
         border-radius: $radius-lg;
@@ -305,8 +301,11 @@
         margin-bottom: 16px;
 
         h2 {
+            flex: 1;
+            min-width: 0;
             color: $light;
             font-size: clamp(18px, 3vw, 24px);
+            overflow-wrap: anywhere;
         }
 
         button {
@@ -327,11 +326,52 @@
         }
     }
 
+    &__controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        span {
+            min-width: 48px;
+            color: $grey;
+            text-align: center;
+            font-size: 13px;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    &__close {
+        margin-left: 8px;
+    }
+
     @media only screen and (max-width: 750px) {
         padding: 12px;
 
         &__dialog {
             padding: 14px;
+        }
+
+        &__header {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+
+            h2 {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .video-modal__controls {
+                grid-column: 1 / -1;
+                grid-row: 2;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .video-modal__close {
+                grid-column: 2;
+                grid-row: 1;
+                margin-left: 0;
+            }
         }
     }
 }
