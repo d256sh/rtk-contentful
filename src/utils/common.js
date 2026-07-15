@@ -42,6 +42,7 @@ export const sortByDate = (arr) => {
 
 export const MEDIA_PLAY_EVENT = "app:media-play";
 export const AUDIO_PLAY_EVENT = "app:audio-play";
+export const AUDIO_PAUSE_EVENT = "app:audio-pause";
 
 export const notifyMediaPlayback = () => {
   window.dispatchEvent(new Event(MEDIA_PLAY_EVENT));
@@ -49,6 +50,10 @@ export const notifyMediaPlayback = () => {
 
 export const notifyAudioPlayback = () => {
   window.dispatchEvent(new Event(AUDIO_PLAY_EVENT));
+};
+
+export const notifyAudioPause = () => {
+  window.dispatchEvent(new Event(AUDIO_PAUSE_EVENT));
 };
 
 export const pauseOtherVideos = (currentVideo) => {

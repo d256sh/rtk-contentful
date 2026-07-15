@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import {
   MEDIA_PLAY_EVENT,
+  notifyAudioPause,
   notifyAudioPlayback,
 } from "../utils/common";
 
@@ -28,6 +29,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
   const currentIndexRef = useRef(0);
   const currentTimeRef = useRef(0);
   const isPlayingRef = useRef(false);
+  const pausedForMediaRef = useRef(false);
   const [sounds, setSounds] = useState([]);
   const [unavailableIndexes, setUnavailableIndexes] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -143,6 +145,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
 
       document.querySelectorAll("video").forEach((video) => video.pause());
       notifyAudioPlayback();
+      pausedForMediaRef.current = false;
       isPlayingRef.current = true;
       setIsPlaying(true);
       updateCurrentTrack();
@@ -152,6 +155,12 @@ const SoundCloudPlayerProvider = ({ children }) => {
       if (widgetRef.current === widget) {
         isPlayingRef.current = false;
         setIsPlaying(false);
+
+        if (!pausedForMediaRef.current) {
+          notifyAudioPause();
+        }
+
+        pausedForMediaRef.current = false;
       }
     };
     const handleProgress = ({ currentPosition }) => {
@@ -188,7 +197,10 @@ const SoundCloudPlayerProvider = ({ children }) => {
         widget.play();
       }
     };
-    const pauseForMedia = () => widgetRef.current?.pause();
+    const pauseForMedia = () => {
+      pausedForMediaRef.current = true;
+      widgetRef.current?.pause();
+    };
 
     const connectWidget = () => {
       if (!window.SC?.Widget || !iframeRef.current) {
@@ -285,8 +297,15 @@ const SoundCloudPlayerProvider = ({ children }) => {
       setIsPlaying(playing);
 
       if (playing) {
+        pausedForMediaRef.current = false;
         document.querySelectorAll("video").forEach((video) => video.pause());
         notifyAudioPlayback();
+      } else {
+        if (!pausedForMediaRef.current) {
+          notifyAudioPause();
+        }
+
+        pausedForMediaRef.current = false;
       }
     },
     syncExternalProgress: (milliseconds) => {
