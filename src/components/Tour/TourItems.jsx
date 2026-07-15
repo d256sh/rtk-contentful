@@ -6,6 +6,7 @@ import { getTourItems } from "../../reducers/tourReducer";
 import TourItem from "./TourItem";
 import Loading from "../Loader.jsx";
 import VideoModal from "../VideoModal";
+import { notifyMediaPlayback } from "../../utils/common";
 
 const TourItems = () => {
   const dispatch = useDispatch();
@@ -39,11 +40,15 @@ const TourItems = () => {
                   isConcertVideoOpen={activeConcertVideo === item.sys.id}
                   onToggleConcertVideo={() => {
                     setVideoModal(null);
+                    if (activeConcertVideo !== item.sys.id) {
+                      notifyMediaPlayback();
+                    }
                     setActiveConcertVideo((current) =>
                       current === item.sys.id ? null : item.sys.id
                     );
                   }}
                   onPlayVideo={(videos, index = 0) => {
+                    notifyMediaPlayback();
                     setActiveConcertVideo(null);
                     setVideoModal({ videos, index });
                   }}

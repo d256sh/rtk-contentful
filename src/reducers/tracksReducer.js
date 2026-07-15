@@ -14,8 +14,6 @@ export const getTracksItems = createAsyncThunk(
     try {
       const data = await request(trackItemCollectionQuery);
 
-      console.log("data", data);
-
       const { items } = data.trackCollection;
 
       return items;

@@ -42,12 +42,12 @@
         // -----------------------------------------
         &__section {
             margin-top: 100px;
-            padding-bottom: 80px;
+            padding-bottom: 200px;
 
             // -- 🖥 Tablet --
             @media only screen and (max-width: 1366px) {
                 margin-top: 50px;
-                padding-bottom: 40px;
+                padding-bottom: 160px;
             }
         }
 

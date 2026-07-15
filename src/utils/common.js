@@ -40,10 +40,25 @@ export const sortByDate = (arr) => {
   return arr.sort((a, b) => new Date(a.date) - new Date(b.date));
 };
 
+export const MEDIA_PLAY_EVENT = "app:media-play";
+export const AUDIO_PLAY_EVENT = "app:audio-play";
+
+export const notifyMediaPlayback = () => {
+  window.dispatchEvent(new Event(MEDIA_PLAY_EVENT));
+};
+
+export const notifyAudioPlayback = () => {
+  window.dispatchEvent(new Event(AUDIO_PLAY_EVENT));
+};
+
 export const pauseOtherVideos = (currentVideo) => {
   document.querySelectorAll("video").forEach((video) => {
     if (video !== currentVideo) {
       video.pause();
     }
   });
+
+  if (!currentVideo.muted) {
+    notifyMediaPlayback();
+  }
 };

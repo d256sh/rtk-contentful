@@ -1,9 +1,9 @@
 import React from "react";
 import Banner from "../components/Banner";
 import TourBanner from "../components/Tour/TourBanner";
-import Tracks from "../components/Tracks";
 import FooterBanner from "../components/FooterBanner";
 import FeaturedXVideo from "../components/FeaturedXVideo";
+import SoundCloudPlayer from "../components/SoundCloudPlayer";
 
 const Home = () => {
   return (
@@ -11,7 +11,7 @@ const Home = () => {
       <Banner />
       <FeaturedXVideo />
       <TourBanner />
-      <Tracks />
+      <SoundCloudPlayer />
       <FooterBanner />
     </main>
   );
