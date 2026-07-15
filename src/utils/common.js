@@ -58,7 +58,10 @@ export const notifyAudioPause = () => {
 
 export const pauseOtherVideos = (currentVideo) => {
   document.querySelectorAll("video").forEach((video) => {
-    if (video !== currentVideo) {
+    if (
+      video !== currentVideo &&
+      !video.hasAttribute("data-media-independent")
+    ) {
       video.pause();
     }
   });

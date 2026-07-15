@@ -143,7 +143,9 @@ const SoundCloudPlayerProvider = ({ children }) => {
         return;
       }
 
-      document.querySelectorAll("video").forEach((video) => video.pause());
+      document
+        .querySelectorAll("video:not([data-media-independent])")
+        .forEach((video) => video.pause());
       notifyAudioPlayback();
       pausedForMediaRef.current = false;
       isPlayingRef.current = true;
@@ -298,7 +300,9 @@ const SoundCloudPlayerProvider = ({ children }) => {
 
       if (playing) {
         pausedForMediaRef.current = false;
-        document.querySelectorAll("video").forEach((video) => video.pause());
+        document
+          .querySelectorAll("video:not([data-media-independent])")
+          .forEach((video) => video.pause());
         notifyAudioPlayback();
       } else {
         if (!pausedForMediaRef.current) {
