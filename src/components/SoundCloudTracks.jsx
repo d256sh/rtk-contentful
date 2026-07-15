@@ -332,17 +332,18 @@ const SoundCloudTracks = ({ enableParallax = false }) => {
           </>
         )}
 
-        {listView === "original" && (
-          <div className="soundcloud-original">
+        <div
+          className="soundcloud-original"
+          hidden={listView !== "original"}
+        >
             <h3>Original SoundCloud Playlist</h3>
             <SoundCloudEmbeddedPlayer
               url="https://soundcloud.com/jahseh-onfroy"
               title="XXXTENTACION original SoundCloud playlist"
-              height={450}
+              height={400}
               synchronized
             />
-          </div>
-        )}
+        </div>
       </div>
     </Section>
   );
