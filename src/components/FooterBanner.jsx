@@ -10,7 +10,7 @@ const FooterBanner = () => {
     <Section className="footer-banner__section">
       <div className="container">
         <div className="footer-banner__wrapper">
-          <Link to="/footer" className="footer-banner">
+          <Link to="/tour" className="footer-banner">
 
             <motion.div
               className="footer-banner__text"
