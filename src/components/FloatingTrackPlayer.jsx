@@ -64,10 +64,11 @@ const FloatingTrackPlayer = () => {
       <div className="floating-player__controls">
         <button
           type="button"
+          className="floating-player__skip floating-player__skip--previous"
           onClick={previous}
           aria-label="Previous SoundCloud track"
         >
-          ‹
+          <Icon name="arrow-right" />
         </button>
         <button
           type="button"
@@ -79,10 +80,11 @@ const FloatingTrackPlayer = () => {
         </button>
         <button
           type="button"
+          className="floating-player__skip"
           onClick={next}
           aria-label="Next SoundCloud track"
         >
-          ›
+          <Icon name="arrow-right" />
         </button>
       </div>
     </aside>

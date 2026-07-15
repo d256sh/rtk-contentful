@@ -590,16 +590,27 @@
       @include flexcenter;
       width: 36px;
       height: 36px;
+      padding: 0;
       color: $light;
       cursor: pointer;
-      font-size: 28px;
+      line-height: 1;
       border-radius: 50%;
       transition: color $transition-fast, background $transition-fast;
+
+      svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
 
       &:hover {
         color: $primary;
         background: $action;
       }
+    }
+
+    .floating-player__skip--previous svg {
+      transform: rotate(180deg);
     }
 
     .floating-player__toggle {
@@ -649,7 +660,11 @@
       button {
         width: 28px;
         height: 32px;
-        font-size: 22px;
+
+        svg {
+          width: 15px;
+          height: 15px;
+        }
       }
 
       .floating-player__toggle {
