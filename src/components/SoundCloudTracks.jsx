@@ -27,6 +27,8 @@ const SoundCloudEmbeddedPlayer = ({
   useEffect(() => {
     let script;
     let widget;
+    let readyTimer;
+    let eventsBound = false;
 
     const handlePlay = () => {
       if (synchronized) {
@@ -56,17 +58,44 @@ const SoundCloudEmbeddedPlayer = ({
         playerContextRef.current.syncExternalProgress(currentPosition);
       }
     };
-    const handleReady = () => {
-      if (synchronized) {
-        playerContextRef.current.activateExternalWidget(widget);
-      }
-    };
     const pauseForCustomPlayer = () => widget.pause();
     const pauseForOtherEmbed = ({ detail }) => {
       if (detail !== playerIdRef.current) {
         widget.pause();
       }
     };
+
+    const bindPlaybackEvents = () => {
+      if (!widget || eventsBound) {
+        return;
+      }
+
+      eventsBound = true;
+      widget.bind(window.SC.Widget.Events.PLAY, handlePlay);
+      widget.bind(window.SC.Widget.Events.PAUSE, handlePause);
+      widget.bind(window.SC.Widget.Events.PLAY_PROGRESS, handleProgress);
+      if (!synchronized) {
+        window.addEventListener(AUDIO_PLAY_EVENT, pauseForCustomPlayer);
+      }
+      window.addEventListener(EMBED_PLAY_EVENT, pauseForOtherEmbed);
+
+      if (synchronized) {
+        playerContextRef.current.activateExternalWidget(widget);
+        widget.getCurrentSound((track) => {
+          widget.getCurrentSoundIndex((index) => {
+            playerContextRef.current.syncExternalTrack(track, index);
+          });
+        });
+        widget.getPosition((position) => {
+          playerContextRef.current.syncExternalProgress(position);
+        });
+        widget.isPaused((paused) => {
+          playerContextRef.current.syncExternalPlaying(!paused);
+        });
+      }
+    };
+
+    const handleReady = () => bindPlaybackEvents();
 
     const connectWidget = () => {
       if (!window.SC?.Widget || !iframeRef.current || widget) {
@@ -75,13 +104,10 @@ const SoundCloudEmbeddedPlayer = ({
 
       widget = window.SC.Widget(iframeRef.current);
       widget.bind(window.SC.Widget.Events.READY, handleReady);
-      widget.bind(window.SC.Widget.Events.PLAY, handlePlay);
-      widget.bind(window.SC.Widget.Events.PAUSE, handlePause);
-      widget.bind(window.SC.Widget.Events.PLAY_PROGRESS, handleProgress);
-      if (!synchronized) {
-        window.addEventListener(AUDIO_PLAY_EVENT, pauseForCustomPlayer);
-      }
-      window.addEventListener(EMBED_PLAY_EVENT, pauseForOtherEmbed);
+      widget.getSounds(() => bindPlaybackEvents());
+      readyTimer = window.setTimeout(() => {
+        widget.getSounds(() => bindPlaybackEvents());
+      }, 750);
     };
 
     script = document.querySelector(`script[src="${WIDGET_API_URL}"]`);
@@ -100,8 +126,9 @@ const SoundCloudEmbeddedPlayer = ({
 
     return () => {
       script?.removeEventListener("load", connectWidget);
+      window.clearTimeout(readyTimer);
 
-      if (synchronized && widget) {
+      if (synchronized && widget && eventsBound) {
         playerContextRef.current.deactivateExternalWidget(widget);
       }
 
