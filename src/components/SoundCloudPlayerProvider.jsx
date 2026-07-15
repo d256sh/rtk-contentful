@@ -22,9 +22,12 @@ export const useSoundCloudPlayer = () =>
 const SoundCloudPlayerProvider = ({ children }) => {
   const iframeRef = useRef(null);
   const widgetRef = useRef(null);
+  const hiddenWidgetRef = useRef(null);
   const soundsRef = useRef([]);
   const unavailableIndexesRef = useRef(new Set());
   const currentIndexRef = useRef(0);
+  const currentTimeRef = useRef(0);
+  const isPlayingRef = useRef(false);
   const [sounds, setSounds] = useState([]);
   const [unavailableIndexes, setUnavailableIndexes] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -66,6 +69,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
     }
 
     currentIndexRef.current = nextIndex;
+    currentTimeRef.current = 0;
     setCurrentIndex(nextIndex);
     setCurrentTrack(soundsRef.current[nextIndex]);
     setCurrentTime(0);
@@ -109,12 +113,13 @@ const SoundCloudPlayerProvider = ({ children }) => {
             Math.floor(Math.random() * playableIndexes.length)
           ] ?? 0;
         currentIndexRef.current = randomIndex;
+        currentTimeRef.current = 0;
         setSounds(nextSounds);
         setCurrentIndex(randomIndex);
         setCurrentTrack(nextSounds[randomIndex]);
         setCurrentTime(0);
-        widget.skip(randomIndex);
-        widget.play();
+        widgetRef.current?.skip(randomIndex);
+        widgetRef.current?.play();
 
         [400, 1000, 2000, 4000].forEach((delay) => {
           refreshTimers.push(
@@ -132,16 +137,36 @@ const SoundCloudPlayerProvider = ({ children }) => {
     };
 
     const handlePlay = () => {
+      if (widgetRef.current !== widget) {
+        return;
+      }
+
       document.querySelectorAll("video").forEach((video) => video.pause());
       notifyAudioPlayback();
+      isPlayingRef.current = true;
       setIsPlaying(true);
       updateCurrentTrack();
     };
 
-    const handlePause = () => setIsPlaying(false);
-    const handleProgress = ({ currentPosition }) =>
+    const handlePause = () => {
+      if (widgetRef.current === widget) {
+        isPlayingRef.current = false;
+        setIsPlaying(false);
+      }
+    };
+    const handleProgress = ({ currentPosition }) => {
+      if (widgetRef.current !== widget) {
+        return;
+      }
+
+      currentTimeRef.current = currentPosition;
       setCurrentTime(currentPosition);
+    };
     const handleError = () => {
+      if (widgetRef.current !== widget) {
+        return;
+      }
+
       const failedIndex = currentIndexRef.current;
       const failedTrack = soundsRef.current[failedIndex];
       unavailableIndexesRef.current.add(failedIndex);
@@ -155,6 +180,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
 
       if (nextIndex !== null) {
         currentIndexRef.current = nextIndex;
+        currentTimeRef.current = 0;
         setCurrentIndex(nextIndex);
         setCurrentTrack(soundsRef.current[nextIndex]);
         setCurrentTime(0);
@@ -162,7 +188,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
         widget.play();
       }
     };
-    const pauseForMedia = () => widget?.pause();
+    const pauseForMedia = () => widgetRef.current?.pause();
 
     const connectWidget = () => {
       if (!window.SC?.Widget || !iframeRef.current) {
@@ -170,6 +196,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
       }
 
       widget = window.SC.Widget(iframeRef.current);
+      hiddenWidgetRef.current = widget;
       widgetRef.current = widget;
       widget.bind(window.SC.Widget.Events.READY, handleReady);
       widget.bind(window.SC.Widget.Events.PLAY, handlePlay);
@@ -208,6 +235,31 @@ const SoundCloudPlayerProvider = ({ children }) => {
     };
   }, []);
 
+  const activateExternalWidget = (externalWidget) => {
+    widgetRef.current = externalWidget;
+    hiddenWidgetRef.current?.pause();
+    externalWidget.skip(currentIndexRef.current);
+    externalWidget.seekTo(currentTimeRef.current);
+
+    if (isPlayingRef.current) {
+      externalWidget.play();
+    }
+  };
+
+  const deactivateExternalWidget = (externalWidget) => {
+    if (widgetRef.current !== externalWidget || !hiddenWidgetRef.current) {
+      return;
+    }
+
+    widgetRef.current = hiddenWidgetRef.current;
+    hiddenWidgetRef.current.skip(currentIndexRef.current);
+    hiddenWidgetRef.current.seekTo(currentTimeRef.current);
+
+    if (isPlayingRef.current) {
+      hiddenWidgetRef.current.play();
+    }
+  };
+
   const value = {
     sounds,
     unavailableIndexes,
@@ -217,6 +269,30 @@ const SoundCloudPlayerProvider = ({ children }) => {
     isPlaying,
     playbackError,
     selectTrack,
+    activateExternalWidget,
+    deactivateExternalWidget,
+    syncExternalTrack: (track, index) => {
+      if (currentIndexRef.current !== index) {
+        currentTimeRef.current = 0;
+        setCurrentTime(0);
+      }
+      currentIndexRef.current = index;
+      setCurrentIndex(index);
+      setCurrentTrack(track);
+    },
+    syncExternalPlaying: (playing) => {
+      isPlayingRef.current = playing;
+      setIsPlaying(playing);
+
+      if (playing) {
+        document.querySelectorAll("video").forEach((video) => video.pause());
+        notifyAudioPlayback();
+      }
+    },
+    syncExternalProgress: (milliseconds) => {
+      currentTimeRef.current = milliseconds;
+      setCurrentTime(milliseconds);
+    },
     previous: () => selectTrack(currentIndexRef.current - 1, -1),
     next: () => selectTrack(currentIndexRef.current + 1),
     refreshSounds: () =>
@@ -232,6 +308,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
     clearPlaybackError: () => setPlaybackError(null),
     seekTo: (milliseconds) => {
       widgetRef.current?.seekTo(milliseconds);
+      currentTimeRef.current = milliseconds;
       setCurrentTime(milliseconds);
     },
   };

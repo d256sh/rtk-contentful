@@ -10,24 +10,56 @@ import {
 } from "../utils/common";
 
 const EMBED_PLAY_EVENT = "app:soundcloud-embed-play";
+const WIDGET_API_URL = "https://w.soundcloud.com/player/api.js";
 
-const SoundCloudEmbeddedPlayer = ({ url, title, height = 166 }) => {
+const SoundCloudEmbeddedPlayer = ({
+  url,
+  title,
+  height = 166,
+  synchronized = false,
+}) => {
   const iframeRef = useRef(null);
   const playerIdRef = useRef(Symbol("soundcloud-player"));
+  const playerContext = useSoundCloudPlayer();
+  const playerContextRef = useRef(playerContext);
+  playerContextRef.current = playerContext;
 
   useEffect(() => {
-    if (!window.SC?.Widget || !iframeRef.current) {
-      return undefined;
-    }
+    let script;
+    let widget;
 
-    const widget = window.SC.Widget(iframeRef.current);
     const handlePlay = () => {
-      notifyMediaPlayback();
+      if (synchronized) {
+        widget.getCurrentSound((track) => {
+          widget.getCurrentSoundIndex((index) => {
+            playerContextRef.current.syncExternalTrack(track, index);
+          });
+        });
+        playerContextRef.current.syncExternalPlaying(true);
+      } else {
+        notifyMediaPlayback();
+      }
+
       window.dispatchEvent(
         new CustomEvent(EMBED_PLAY_EVENT, {
           detail: playerIdRef.current,
         })
       );
+    };
+    const handlePause = () => {
+      if (synchronized) {
+        playerContextRef.current.syncExternalPlaying(false);
+      }
+    };
+    const handleProgress = ({ currentPosition }) => {
+      if (synchronized) {
+        playerContextRef.current.syncExternalProgress(currentPosition);
+      }
+    };
+    const handleReady = () => {
+      if (synchronized) {
+        playerContextRef.current.activateExternalWidget(widget);
+      }
     };
     const pauseForCustomPlayer = () => widget.pause();
     const pauseForOtherEmbed = ({ detail }) => {
@@ -36,20 +68,55 @@ const SoundCloudEmbeddedPlayer = ({ url, title, height = 166 }) => {
       }
     };
 
-    widget.bind(window.SC.Widget.Events.PLAY, handlePlay);
-    window.addEventListener(AUDIO_PLAY_EVENT, pauseForCustomPlayer);
-    window.addEventListener(EMBED_PLAY_EVENT, pauseForOtherEmbed);
+    const connectWidget = () => {
+      if (!window.SC?.Widget || !iframeRef.current || widget) {
+        return;
+      }
+
+      widget = window.SC.Widget(iframeRef.current);
+      widget.bind(window.SC.Widget.Events.READY, handleReady);
+      widget.bind(window.SC.Widget.Events.PLAY, handlePlay);
+      widget.bind(window.SC.Widget.Events.PAUSE, handlePause);
+      widget.bind(window.SC.Widget.Events.PLAY_PROGRESS, handleProgress);
+      if (!synchronized) {
+        window.addEventListener(AUDIO_PLAY_EVENT, pauseForCustomPlayer);
+      }
+      window.addEventListener(EMBED_PLAY_EVENT, pauseForOtherEmbed);
+    };
+
+    script = document.querySelector(`script[src="${WIDGET_API_URL}"]`);
+
+    if (window.SC?.Widget) {
+      connectWidget();
+    } else if (script) {
+      script.addEventListener("load", connectWidget);
+    } else {
+      script = document.createElement("script");
+      script.src = WIDGET_API_URL;
+      script.async = true;
+      script.addEventListener("load", connectWidget);
+      document.body.appendChild(script);
+    }
 
     return () => {
-      widget.unbind(window.SC.Widget.Events.PLAY);
+      script?.removeEventListener("load", connectWidget);
+
+      if (synchronized && widget) {
+        playerContextRef.current.deactivateExternalWidget(widget);
+      }
+
+      widget?.unbind(window.SC.Widget.Events.READY);
+      widget?.unbind(window.SC.Widget.Events.PLAY);
+      widget?.unbind(window.SC.Widget.Events.PAUSE);
+      widget?.unbind(window.SC.Widget.Events.PLAY_PROGRESS);
       window.removeEventListener(AUDIO_PLAY_EVENT, pauseForCustomPlayer);
       window.removeEventListener(EMBED_PLAY_EVENT, pauseForOtherEmbed);
     };
-  }, []);
+  }, [synchronized]);
 
   const playerUrl = `https://w.soundcloud.com/player/?url=${encodeURIComponent(
     url
-  )}&color=%23ffa600&auto_play=false&show_artwork=true&visual=${height > 200}`;
+  )}&color=%23ffa600&auto_play=false&show_artwork=true&hide_related=true&show_comments=false&show_reposts=false&show_teaser=false&visual=${height > 200}`;
 
   return (
     <iframe
@@ -214,6 +281,7 @@ const SoundCloudTracks = () => {
             url="https://soundcloud.com/jahseh-onfroy"
             title="XXXTENTACION original SoundCloud playlist"
             height={450}
+            synchronized
           />
         </div>
       </div>
