@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-const Section = ({ children, ...rest }) => {
+const Section = ({ children, disableParallax = false, ...rest }) => {
   const ref = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -12,7 +12,9 @@ const Section = ({ children, ...rest }) => {
 
   return (
     <section {...rest} ref={ref}>
-      <motion.div style={{ y: backgroundY }}>{children}</motion.div>
+      <motion.div style={disableParallax ? undefined : { y: backgroundY }}>
+        {children}
+      </motion.div>
     </section>
   );
 };

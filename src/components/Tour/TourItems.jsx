@@ -24,7 +24,7 @@ const TourItems = () => {
 
   return (
     <>
-      <Section className="tour">
+      <Section className="tour" disableParallax>
         <div className="container">
           <Title text="Past Tours" />
           {isLoading ? (

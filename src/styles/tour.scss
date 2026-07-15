@@ -23,8 +23,8 @@
 
 // === Tour Section ===
 .tour {
-    padding: 60px 0;
-
+    padding: 60px 0 120px;
+    
     &-page {
         position: relative;
 
@@ -125,15 +125,31 @@
         }
 
         &__summary {
-            @include flexcenter;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+            align-items: center;
             gap: 24px;
             text-transform: uppercase;
 
+            > .tour-item__play {
+                justify-self: end;
+            }
+
             @media only screen and (max-width: 750px) {
-                flex-wrap: wrap;
+                grid-template-columns: 1fr;
                 row-gap: 12px;
-                align-items: flex-start;
+
+                .tour-item__info,
+                .tour-item__city {
+                    justify-self: center;
+                    text-align: center;
+                }
+
+                > .tour-item__play {
+                    width: 100%;
+                    margin-left: 0;
+                    justify-self: stretch;
+                }
             }
         }
 
@@ -169,10 +185,12 @@
         }
 
         &__city {
+            justify-self: center;
             color: $light;
             font-size: 22px;
             font-weight: 700;
             letter-spacing: -0.01em;
+            text-align: center;
 
             @media only screen and (max-width: 1366px) {
                 font-size: 17px;
