@@ -1,105 +1,97 @@
-.banner {
-    min-height: 420px;
-    position: relative;
-    background-image: url('../assets//images/main-bg.webp');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center top;
-    border-radius: 0 0 $radius-xl $radius-xl;
-    overflow: hidden;
-
-    // Dark overlay gradient
-    &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg,
-                rgba(5, 5, 8, 0.3) 0%,
-                rgba(5, 5, 8, 0.6) 60%,
-                $primary 100%);
-        z-index: 1;
-    }
-
-    &-text {
-        @include defaultcenter;
-        top: 44%;
-        z-index: 2;
-        font-size: clamp(1rem, 3vw, 1.5rem);
-        font-weight: 300;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.7);
-        text-shadow: 0 0 40px rgba(255, 166, 0, 0.3);
-    }
-
-    @media only screen and (max-width: 750px) {
-        min-height: 280px;
-    }
-}
-
-
+// =============================================
+// FOOTER BANNER
+// =============================================
 .footer {
-
     &-banner {
+
+        // -- Layout --
+        position: relative;
+        display: flex;
+        align-items: center;
         width: 100%;
         min-height: 380px;
-        padding: 40px 24px;
-        align-items: center;
-        display: flex;
-        position: relative;
-        overflow: hidden;
+        height: 100%;
+        padding: 0 24px;
+
+        // -- Visual --
         border-radius: $radius-xl;
+
+        // -- Animation --
         transition: transform $transition-base, box-shadow $transition-base;
+
+
+        // -- Mixins --
         @include glass(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.06), 16px);
 
-
-        .footer-banner__logo img {
-            transform: scaleX(-1);
-        }
-
+        // -- 🖥 Tablet --
         @media only screen and (max-width: 1366px) {
             min-height: 260px;
         }
 
+        // -- 📱 Mobile --
         @media only screen and (max-width: 750px) {
             align-items: flex-end;
             justify-content: center;
             text-align: center;
+            min-height: 400px;
             padding: 24px;
-            min-height: 300px;
         }
 
-
-
+        // -----------------------------------------
+        // __section
+        // -----------------------------------------
         &__section {
             margin-top: 100px;
             padding-bottom: 80px;
 
+            // -- 🖥 Tablet --
             @media only screen and (max-width: 1366px) {
                 margin-top: 50px;
                 padding-bottom: 40px;
             }
         }
 
+        // -----------------------------------------
+        // __wrapper
+        // -----------------------------------------
         &__wrapper {
-            overflow: hidden;
-            min-height: 504px;
             display: flex;
             align-items: flex-end;
+            min-height: 504px;
+            overflow: hidden;
 
+            // -- 🖥 Tablet --
             @media only screen and (max-width: 1366px) {
                 min-height: 320px;
             }
         }
 
+        // -----------------------------------------
+        // __text
+        // -----------------------------------------
         &__text {
+
+            // -- 🖥 Tablet --
             @media only screen and (max-width: 1366px) {
                 position: relative;
                 z-index: 3;
             }
+
+            // -- 📱 Mobile --
+            @media only screen and (max-width: 750px) {
+                position: absolute;
+                width: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+            }
         }
 
+        // -----------------------------------------
+        // __subtitle
+        // -----------------------------------------
         &__subtitle {
+            // -- Typography --
             color: $grey;
             font-size: 20px;
             font-weight: 700;
@@ -107,92 +99,113 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
 
+            // -- 🖥 Tablet --
             @media only screen and (max-width: 1366px) {
                 font-size: 16px;
                 line-height: 125%;
             }
 
+            // -- 📱 Mobile --
             @media only screen and (max-width: 750px) {
                 font-size: 14px;
             }
         }
 
+        // -----------------------------------------
+        // __title
+        // -----------------------------------------
         &__title {
+            // -- Typography --
             color: $light;
             font-size: 64px;
             font-weight: 900;
             line-height: 1.1;
-            margin-top: 16px;
             letter-spacing: -0.02em;
 
+            // -- Spacing --
+            margin-top: 16px;
+
+            // -- 🖥 Tablet --
             @media only screen and (max-width: 1366px) {
                 font-size: 48px;
                 margin-top: 12px;
             }
 
+            // -- 📱 Mobile --
             @media only screen and (max-width: 750px) {
                 font-size: 36px;
                 margin-top: 8px;
             }
         }
 
+        // -----------------------------------------
+        // __image
+        // -----------------------------------------
         &__image {
+            // -- Layout --
             position: absolute;
-            right: 8%;
+            right: 0;
             bottom: -23px;
             z-index: 2;
+
+            // -- Animation --
             transition: transform $transition-slow;
 
-            @media only screen and (max-width: 1366px) {
-                right: 3%;
-            }
 
+            // -- 📱 Mobile --
             @media only screen and (max-width: 750px) {
-                width: 100%;
-                height: 100%;
                 right: 0;
                 bottom: 0;
+                width: 100%;
+                height: 100%;
             }
 
             img {
                 transition: transform $transition-slow;
 
-                @media only screen and (max-width: 1366px) {
+                // -- 🖥 Tablet --
+                @media only screen and (max-width: 1180px) {
                     width: 300px;
                 }
 
+                // -- 📱 Mobile --
                 @media only screen and (max-width: 750px) {
-                    left: 50%;
-                    transform: translateX(-50%);
                     position: absolute;
+                    left: 50%;
                     bottom: -23px;
                     width: 80%;
+                    transform: translateX(-50%);
                 }
             }
         }
 
-        &__logo {
+        // -----------------------------------------
+        // hand
+        // -----------------------------------------
+        &__hand {
+            // -- Layout --
             position: absolute;
-            top: 25px;
-            right: 25px;
+            bottom: 0;
+            left: 30%;
             z-index: 1;
 
             img {
-                transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-                transform: rotate(0);
                 opacity: 0.6;
+                transform: scaleX(-1);
+                transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
+            // -- 🖥 Tablet --
             @media only screen and (max-width: 1366px) {
                 width: 104px;
-                height: 98px;
-                top: 10px;
-                right: 10px;
+                height: 128px;
             }
 
+            // -- 📱 Mobile --
             @media only screen and (max-width: 750px) {
-                width: 50px;
-                height: 50px;
+                width: 0;
+                height: 0;
+                bottom: -100%;
             }
         }
     }

@@ -1,0 +1,46 @@
+// =============================================
+// HERO BANNER
+// =============================================
+.banner {
+    // -- Layout --
+    position: relative;
+    min-height: 420px;
+    overflow: hidden;
+
+    // -- Visual --
+    background-image: url('../assets//images/main-bg.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
+    border-radius: 0 0 $radius-xl $radius-xl;
+
+    // -- Pseudo: Dark overlay gradient --
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(180deg,
+                rgba(5, 5, 8, 0.3) 0%,
+                rgba(5, 5, 8, 0.6) 60%,
+                $primary 100%);
+    }
+
+    // -- Child: Banner text --
+    &-text {
+        @include defaultcenter;
+        top: 44%;
+        z-index: 2;
+        font-size: clamp(1rem, 3vw, 1.5rem);
+        font-weight: 300;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+        text-shadow: 0 0 40px rgba(255, 166, 0, 0.3);
+    }
+
+    // -- 📱 Mobile --
+    @media only screen and (max-width: 750px) {
+        min-height: 280px;
+    }
+}
