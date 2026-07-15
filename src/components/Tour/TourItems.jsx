@@ -10,6 +10,7 @@ import VideoModal from "../VideoModal";
 const TourItems = () => {
   const dispatch = useDispatch();
   const [videoModal, setVideoModal] = useState(null);
+  const [activeConcertVideo, setActiveConcertVideo] = useState(null);
 
   const { items = [], isLoading } = useSelector(({ tour }) => tour);
 
@@ -35,9 +36,17 @@ const TourItems = () => {
                   {...item}
                   i={i}
                   key={item.sys.id}
-                  onPlayVideo={(videos, index = 0) =>
-                    setVideoModal({ videos, index })
-                  }
+                  isConcertVideoOpen={activeConcertVideo === item.sys.id}
+                  onToggleConcertVideo={() => {
+                    setVideoModal(null);
+                    setActiveConcertVideo((current) =>
+                      current === item.sys.id ? null : item.sys.id
+                    );
+                  }}
+                  onPlayVideo={(videos, index = 0) => {
+                    setActiveConcertVideo(null);
+                    setVideoModal({ videos, index });
+                  }}
                 />
               ))}
             </ul>
