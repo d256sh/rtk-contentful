@@ -39,3 +39,11 @@ export const getLocaleDateString = (
 export const sortByDate = (arr) => {
   return arr.sort((a, b) => new Date(a.date) - new Date(b.date));
 };
+
+export const pauseOtherVideos = (currentVideo) => {
+  document.querySelectorAll("video").forEach((video) => {
+    if (video !== currentVideo) {
+      video.pause();
+    }
+  });
+};

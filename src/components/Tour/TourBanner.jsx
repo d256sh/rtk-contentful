@@ -1,6 +1,7 @@
 import React from "react";
 
 import Section from "../Section/Section";
+import { pauseOtherVideos } from "../../utils/common";
 
 import video from "../../assets/videos/XM.webm";
 
@@ -11,6 +12,7 @@ const TourBanner = () => {
         <video
           style={{ filter: "contrast(200%)" }}
           controls
+          onPlay={({ currentTarget }) => pauseOtherVideos(currentTarget)}
         >
           <source src={video} type="video/webm" />
         </video>

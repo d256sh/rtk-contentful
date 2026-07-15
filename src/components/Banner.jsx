@@ -17,7 +17,7 @@ const Banner = () => {
             animate={{ opacity: 1, letterSpacing: "0.3em" }}
             transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.3 }}
           >
-            Welcome back to spring 2018
+            Welcome back to the days before summer 2018
           </motion.p>
         </div>
       </div>
