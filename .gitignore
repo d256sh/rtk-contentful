@@ -1,3 +1,4 @@
+/build
 /node_modules
 .env
 **/.DS_Store
@@ -10,3 +11,7 @@
 .env.test.local
 .env.test.local.example
 .env.test.local.example
+
+
+
+

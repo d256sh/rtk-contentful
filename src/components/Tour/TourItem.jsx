@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 
 import { getLocaleDateString } from "../../utils/common";
-import Icon from "../Icon";
+import YouTubePlayer from "../YouTubePlayer";
 
 const TourItem = ({
   date,
@@ -12,6 +12,7 @@ const TourItem = ({
   videoLink,
   setlistCollection,
   i,
+  onPlayVideo,
 }) => {
   const setlist = setlistCollection?.items ?? [];
 
@@ -37,19 +38,15 @@ const TourItem = ({
             {city}
             {country && `, ${country}`}
           </p>
-
-          {videoLink && (
-            <a
-              href={videoLink}
-              target="_blank"
-              rel="noreferrer"
-              className="tour-item__button"
-            >
-              <span>Concert video</span>
-              <Icon name="arrow-right" />
-            </a>
-          )}
         </div>
+
+        {videoLink && (
+          <YouTubePlayer
+            url={videoLink}
+            title={`${place} concert video`}
+            className="tour-item__concert-video"
+          />
+        )}
 
         {!!setlist.length && (
           <div className="tour-item__setlist">
@@ -63,10 +60,18 @@ const TourItem = ({
                   </div>
 
                   {track.videoLink && (
-                    <a href={track.videoLink} target="_blank" rel="noreferrer">
-                      <span>Play video</span>
-                      <Icon name="arrow-right" />
-                    </a>
+                    <button
+                      type="button"
+                      className="tour-item__play"
+                      onClick={() =>
+                        onPlayVideo({
+                          url: track.videoLink,
+                          title: track.title,
+                        })
+                      }
+                    >
+                      Play video
+                    </button>
                   )}
                 </li>
               ))}
