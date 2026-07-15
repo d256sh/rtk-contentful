@@ -172,6 +172,7 @@ const SoundCloudTracks = () => {
     pause,
     clearPlaybackError,
   } = useSoundCloudPlayer();
+  const [listView, setListView] = useState("original");
   const [visibleCount, setVisibleCount] = useState(10);
   const [showFallbackPlayer, setShowFallbackPlayer] = useState(false);
   const availableTracks = sounds
@@ -189,9 +190,32 @@ const SoundCloudTracks = () => {
       <div className="container">
         <Title text="SoundCloud Tracks" />
 
-        {!sounds.length ? (
-          <Loader />
-        ) : (
+        <div className="soundcloud-view-toggle" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={listView === "original"}
+            className={listView === "original" ? "active" : undefined}
+            onClick={() => setListView("original")}
+          >
+            Original SoundCloud
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={listView === "custom"}
+            className={listView === "custom" ? "active" : undefined}
+            onClick={() => setListView("custom")}
+          >
+            Custom List
+          </button>
+        </div>
+
+        {listView === "custom" && (
+          <>
+            {!sounds.length ? (
+              <Loader />
+            ) : (
           <ul
             className="soundcloud-tracks"
             onScroll={({ currentTarget }) => {
@@ -250,10 +274,10 @@ const SoundCloudTracks = () => {
               );
             })}
           </ul>
-        )}
+            )}
 
-        {playbackError?.track && (
-          <div className="soundcloud-error" role="alert">
+            {playbackError?.track && (
+              <div className="soundcloud-error" role="alert">
             <div>
               <strong>Track playback failed</strong>
               <p>
@@ -299,18 +323,22 @@ const SoundCloudTracks = () => {
                 />
               </div>
             )}
-          </div>
+              </div>
+            )}
+          </>
         )}
 
-        <div className="soundcloud-original">
-          <h3>Original SoundCloud Playlist</h3>
-          <SoundCloudEmbeddedPlayer
-            url="https://soundcloud.com/jahseh-onfroy"
-            title="XXXTENTACION original SoundCloud playlist"
-            height={450}
-            synchronized
-          />
-        </div>
+        {listView === "original" && (
+          <div className="soundcloud-original">
+            <h3>Original SoundCloud Playlist</h3>
+            <SoundCloudEmbeddedPlayer
+              url="https://soundcloud.com/jahseh-onfroy"
+              title="XXXTENTACION original SoundCloud playlist"
+              height={450}
+              synchronized
+            />
+          </div>
+        )}
       </div>
     </Section>
   );
