@@ -9,6 +9,16 @@ export const tourItemCollectionQuery = `
         country
         ticketLink
         videoLink
+        setlistCollection(limit: 100) {
+          items {
+            sys {
+              id
+            }
+            title
+            note
+            videoLink
+          }
+        }
         sys {
           id
         }

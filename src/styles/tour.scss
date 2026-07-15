@@ -89,6 +89,12 @@
         gap: 12px;
     }
 
+    &-empty {
+        margin-top: 32px;
+        color: $grey;
+        text-align: center;
+    }
+
     &-banner {
         position: relative;
         padding-top: 40px;
@@ -103,10 +109,7 @@
     }
 
     &-item {
-        @include flexcenter;
         padding: 24px;
-        text-transform: uppercase;
-        justify-content: space-between;
         @include glass;
         border-radius: $radius-md;
         transition: all $transition-base;
@@ -118,10 +121,20 @@
         }
 
         @media only screen and (max-width: 750px) {
-            flex-wrap: wrap;
-            row-gap: 12px;
             padding: 16px;
-            align-items: flex-start;
+        }
+
+        &__summary {
+            @include flexcenter;
+            justify-content: space-between;
+            gap: 24px;
+            text-transform: uppercase;
+
+            @media only screen and (max-width: 750px) {
+                flex-wrap: wrap;
+                row-gap: 12px;
+                align-items: flex-start;
+            }
         }
 
         &__info {
@@ -186,6 +199,83 @@
 
             @media only screen and (max-width: 750px) {
                 width: 100%;
+            }
+        }
+
+        &__setlist {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid $glass-border;
+
+            h3 {
+                color: $action;
+                font-size: 14px;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+            }
+
+            ol {
+                margin-top: 12px;
+                counter-reset: setlist;
+            }
+
+            li {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 12px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                counter-increment: setlist;
+
+                &::before {
+                    content: counter(setlist, decimal-leading-zero);
+                    color: $grey;
+                    font-size: 12px;
+                    font-variant-numeric: tabular-nums;
+                }
+
+                &:last-child {
+                    border-bottom: 0;
+                }
+
+                > a {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-left: auto;
+                    color: $action;
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 0.05em;
+                    text-transform: uppercase;
+                    transition: color $transition-fast;
+
+                    &:hover {
+                        color: $light;
+                    }
+
+                    svg {
+                        width: 14px;
+                        height: 12px;
+                        fill: currentColor;
+                    }
+                }
+            }
+        }
+
+        &__track {
+            min-width: 0;
+
+            > span {
+                color: $light;
+                font-size: 15px;
+                font-weight: 700;
+            }
+
+            p {
+                margin-top: 2px;
+                color: $grey;
+                font-size: 12px;
             }
         }
     }

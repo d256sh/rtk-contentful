@@ -8,12 +8,13 @@ const TourItem = ({
   date,
   city,
   place,
-  ticketLink,
+  country,
   videoLink,
-  soldOut,
+  setlistCollection,
   i,
-  offset = 260,
 }) => {
+  const setlist = setlistCollection?.items ?? [];
+
   return (
     <motion.li
       initial={{ opacity: 0, x: -40 }}
@@ -25,19 +26,54 @@ const TourItem = ({
         ease: [0.4, 0, 0.2, 1],
       }}
     >
-      <div className="tour-item">
-        <div className="tour-item__info">
-          <div className="tour-item__date">{getLocaleDateString(date, {})}</div>
-          <p className="tour-item__place">{place}</p>
+      <article className="tour-item">
+        <div className="tour-item__summary">
+          <div className="tour-item__info">
+            <div className="tour-item__date">{getLocaleDateString(date, {})}</div>
+            <p className="tour-item__place">{place}</p>
+          </div>
+
+          <p className="tour-item__city">
+            {city}
+            {country && `, ${country}`}
+          </p>
+
+          {videoLink && (
+            <a
+              href={videoLink}
+              target="_blank"
+              rel="noreferrer"
+              className="tour-item__button"
+            >
+              <span>Concert video</span>
+              <Icon name="arrow-right" />
+            </a>
+          )}
         </div>
 
-        <p className="tour-item__city">{city}</p>
+        {!!setlist.length && (
+          <div className="tour-item__setlist">
+            <h3>Setlist</h3>
+            <ol>
+              {setlist.map((track) => (
+                <li key={track.sys.id}>
+                  <div className="tour-item__track">
+                    <span>{track.title}</span>
+                    {track.note && <p>{track.note}</p>}
+                  </div>
 
-        <a href={videoLink} target="_blank" rel="noreferrer" className="tour-item__button">
-          <span>Last video</span>
-          <Icon name="arrow-right" />
-        </a>
-      </div>
+                  {track.videoLink && (
+                    <a href={track.videoLink} target="_blank" rel="noreferrer">
+                      <span>Play video</span>
+                      <Icon name="arrow-right" />
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+      </article>
     </motion.li>
   );
 };

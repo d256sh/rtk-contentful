@@ -4,7 +4,6 @@ import Title from "../Title";
 import { useDispatch, useSelector } from "react-redux";
 import { getTourItems } from "../../reducers/tourReducer";
 import TourItem from "./TourItem";
-import { sortByDate } from "../../utils/common";
 import Loading from "../Loader.jsx";
 
 const TourItems = () => {
@@ -12,11 +11,9 @@ const TourItems = () => {
 
   const { items = [], isLoading } = useSelector(({ tour }) => tour);
 
-  const filtered = sortByDate(
-    items
-      .filter(({ soldOut, ticketLink }) => !soldOut && ticketLink)
-      .filter((_, i) => i < 5)
-  );
+  const pastTours = items
+    .filter(({ date }) => date && new Date(date) <= new Date())
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   useEffect(() => {
     dispatch(getTourItems());
@@ -28,12 +25,14 @@ const TourItems = () => {
         <Title text="Past Tours" />
         {isLoading ? (
           <Loading />
-        ) : (
+        ) : pastTours.length ? (
           <ul className="tour-list">
-            {filtered.map((item, i) => (
+            {pastTours.map((item, i) => (
               <TourItem {...item} i={i} key={item.sys.id} />
             ))}
           </ul>
+        ) : (
+          <p className="tour-empty">No past concerts found.</p>
         )}
       </div>
     </Section>
