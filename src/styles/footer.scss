@@ -57,11 +57,10 @@
         &__wrapper {
             display: flex;
             align-items: flex-end;
-            min-height: 504px;
             overflow: hidden;
 
             // -- 🖥 Tablet --
-            @media only screen and (max-width: 1366px) {
+            @media  (min-width: 1181px) {
                 min-height: 320px;
             }
         }
