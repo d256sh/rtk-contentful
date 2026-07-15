@@ -57,7 +57,7 @@
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 24px rgba(255, 166, 0, 0.35);
+        box-shadow: 0 6px 24px $action-35;
         filter: brightness(1.1);
 
         svg {
@@ -77,6 +77,6 @@
 @mixin gradient-text($gradient: $gradient-accent) {
     background: $gradient;
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: $transparent;
     background-clip: text;
 }

@@ -21,7 +21,7 @@
 
 
         // -- Mixins --
-        @include glass(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.06), 16px);
+        @include glass($white-03, $white-06, 16px);
 
         // -- 🖥 Tablet --
         @media only screen and (max-width: 1366px) {

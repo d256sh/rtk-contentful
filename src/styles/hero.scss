@@ -21,8 +21,8 @@
         inset: 0;
         z-index: 1;
         background: linear-gradient(180deg,
-                rgba(5, 5, 8, 0.3) 0%,
-                rgba(5, 5, 8, 0.6) 60%,
+                $hero-dark-30 0%,
+                $hero-dark-60 60%,
                 $primary 100%);
     }
 
@@ -35,8 +35,8 @@
         font-weight: 300;
         letter-spacing: 0.3em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.7);
-        text-shadow: 0 0 40px rgba(255, 166, 0, 0.3);
+        color: $white-70;
+        text-shadow: 0 0 40px $action-30;
     }
 
     // -- 📱 Mobile --
@@ -63,8 +63,8 @@
         border-radius: $radius-xl;
 
         box-shadow:
-            0 24px 60px rgba(0, 0, 0, 0.55),
-            0 0 40px rgba(255, 166, 0, 0.16);
+            0 24px 60px $black-55,
+            0 0 40px $action-16;
 
         video {
             display: block;
@@ -86,8 +86,8 @@
         font-weight: 700;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        background: rgba(0, 0, 0, 0.72);
-        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: $black-72;
+        border: 1px solid $white-16;
         border-radius: 999px;
         backdrop-filter: blur(10px);
         transition: color $transition-fast, background $transition-fast;
@@ -113,7 +113,7 @@
             padding: 0;
             overflow: hidden;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.3);
+            background: $white-30;
             border-radius: 999px;
 
             span {

@@ -1,24 +1,67 @@
 // === Colors ===
 $primary: #000000;
+$dark: #000000;
+$surface-dark: #130d0d;
+$surface-player: #0f0b0b;
 $light: #f0f0f5;
 $action: #ffa600;
-$grey: rgba(255, 255, 255, 0.45);
-$dark: #000000;
+$action-mid: #ff6b00;
+$action-end: #ff3d00;
+$transparent: transparent;
+
+// === Color opacity scale ===
+$white-02: rgba(255, 255, 255, 0.02);
+$white-03: rgba(255, 255, 255, 0.03);
+$white-04: rgba(255, 255, 255, 0.04);
+$white-06: rgba(255, 255, 255, 0.06);
+$white-07: rgba(255, 255, 255, 0.07);
+$white-08: rgba(255, 255, 255, 0.08);
+$white-10: rgba(255, 255, 255, 0.1);
+$white-16: rgba(255, 255, 255, 0.16);
+$white-30: rgba(255, 255, 255, 0.3);
+$white-45: rgba(255, 255, 255, 0.45);
+$white-70: rgba(255, 255, 255, 0.7);
+
+$black-20: rgba(0, 0, 0, 0.2);
+$black-30: rgba(0, 0, 0, 0.3);
+$black-40: rgba(0, 0, 0, 0.4);
+$black-50: rgba(0, 0, 0, 0.5);
+$black-55: rgba(0, 0, 0, 0.55);
+$black-72: rgba(0, 0, 0, 0.72);
+$black-85: rgba(0, 0, 0, 0.85);
+
+$action-08: rgba(255, 166, 0, 0.08);
+$action-12: rgba(255, 166, 0, 0.12);
+$action-15: rgba(255, 166, 0, 0.15);
+$action-16: rgba(255, 166, 0, 0.16);
+$action-28: rgba(255, 166, 0, 0.28);
+$action-30: rgba(255, 166, 0, 0.3);
+$action-35: rgba(255, 166, 0, 0.35);
+$action-38: rgba(255, 166, 0, 0.38);
+$action-42: rgba(255, 166, 0, 0.42);
+
+$hero-dark-30: rgba(10, 7, 7, 0.3);
+$hero-dark-60: rgba(10, 7, 7, 0.6);
+$hero-dark-75: rgba(10, 7, 7, 0.75);
+$panel-dark-92: rgba(18, 12, 12, 0.92);
+$panel-dark-95: rgba(18, 12, 12, 0.95);
+
+$grey: $white-45;
 
 // === Accent Gradient ===
-$gradient-accent: linear-gradient(135deg, #ffa600 0%, #ff6b00 50%, #ff3d00 100%);
-$gradient-dark: linear-gradient(180deg, $primary 0%, #0a0a12 50%, $primary 100%);
-$gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+$gradient-accent: linear-gradient(135deg, $action 0%, $action-mid 50%, $action-end 100%);
+$gradient-dark: linear-gradient(180deg, $primary 0%, $surface-dark 50%, $primary 100%);
+$gradient-card: linear-gradient(135deg, $white-06 0%, $white-02 100%);
 
 // === Glass ===
-$glass-bg: rgba(255, 255, 255, 0.04);
-$glass-border: rgba(255, 255, 255, 0.08);
+$glass-bg: $white-04;
+$glass-border: $white-08;
 $glass-blur: 20px;
 
 // === Shadows ===
-$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-$shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
-$shadow-glow: 0 0 40px rgba(255, 166, 0, 0.15);
+$shadow-sm: 0 2px 8px $black-30;
+$shadow-md: 0 8px 32px $black-40;
+$shadow-glow: 0 0 40px $action-15;
 
 // === Radius ===
 $radius-sm: 8px;

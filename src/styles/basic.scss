@@ -63,7 +63,7 @@ html {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border: 1px solid rgba(255, 166, 0, 0.3);
+    border: 1px solid $action-30;
     border-radius: $radius-md;
     transition: all $transition-base;
     position: relative;
@@ -82,9 +82,9 @@ html {
 
     &:hover {
         color: $primary;
-        border-color: transparent;
+        border-color: $transparent;
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(255, 166, 0, 0.3);
+        box-shadow: 0 8px 24px $action-30;
 
         &::before {
             opacity: 1;

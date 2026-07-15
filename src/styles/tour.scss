@@ -9,7 +9,7 @@
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        border: 3px solid rgba(255, 255, 255, 0.1);
+        border: 3px solid $white-10;
         border-top-color: $action;
         animation: spin 0.8s linear infinite;
     }
@@ -115,7 +115,7 @@
         transition: all $transition-base;
 
         &:hover {
-            background: rgba(255, 255, 255, 0.07);
+            background: $white-07;
             transform: translateX(4px);
             box-shadow: $shadow-sm;
         }
@@ -228,7 +228,7 @@
                 flex-wrap: wrap;
                 gap: 14px;
                 padding: 12px 0;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                border-bottom: 1px solid $white-06;
                 counter-increment: setlist;
 
                 &::before {
@@ -269,7 +269,7 @@
             font-weight: 700;
             letter-spacing: 0.05em;
             text-transform: uppercase;
-            border: 1px solid rgba(255, 166, 0, 0.35);
+            border: 1px solid $action-35;
             border-radius: $radius-sm;
             transition: color $transition-fast, background $transition-fast;
 
@@ -304,13 +304,13 @@
     align-items: center;
     justify-content: center;
     padding: 24px;
-    background: rgba(0, 0, 0, 0.85);
+    background: $black-85;
     backdrop-filter: blur(8px);
 
     &__dialog {
         width: min(1200px, 100%);
         padding: 20px;
-        @include glass(rgba(10, 10, 18, 0.95), $glass-border, 24px);
+        @include glass($panel-dark-95, $glass-border, 24px);
         border-radius: $radius-lg;
         box-shadow: $shadow-md;
     }
