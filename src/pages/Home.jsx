@@ -3,7 +3,7 @@ import Banner from "../components/Banner";
 import TourBanner from "../components/Tour/TourBanner";
 import FooterBanner from "../components/FooterBanner";
 import FeaturedXVideo from "../components/FeaturedXVideo";
-import SoundCloudPlayer from "../components/SoundCloudPlayer";
+import SoundCloudTracks from "../components/SoundCloudTracks";
 
 const Home = () => {
   return (
@@ -11,7 +11,7 @@ const Home = () => {
       <Banner />
       <FeaturedXVideo />
       <TourBanner />
-      <SoundCloudPlayer />
+      <SoundCloudTracks />
       <FooterBanner />
     </main>
   );

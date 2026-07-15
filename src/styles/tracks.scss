@@ -265,22 +265,106 @@
   }
 }
 
-.soundcloud {
+.soundcloud-tracks {
+  max-height: 620px;
+  margin-top: 32px;
+  padding-right: 8px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scrollbar-color: $action rgba(255, 255, 255, 0.06);
+  scrollbar-width: thin;
+
   &-section {
     padding: 60px 0;
   }
 
-  &-player {
-    margin-top: 32px;
-    padding: 12px;
-    overflow: hidden;
+  li {
     @include glass;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
+    border-radius: $radius-md;
+    transition: background $transition-fast, border-color $transition-fast;
 
-    iframe {
-      display: block;
-      border-radius: $radius-md;
+    &:hover,
+    &.active {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 166, 0, 0.42);
+    }
+
+    button {
+      display: grid;
+      grid-template-columns: 36px 56px minmax(0, 1fr) 40px;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 10px 14px;
+      color: $light;
+      cursor: pointer;
+      text-align: left;
+    }
+  }
+
+  &__number {
+    color: $grey;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__cover {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: $radius-sm;
+  }
+
+  &__title {
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__action {
+    @include flexcenter;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 166, 0, 0.12);
+    border-radius: 50%;
+
+    svg {
+      width: 15px;
+      height: 15px;
+      fill: $action;
+    }
+  }
+
+  @media only screen and (max-width: 750px) {
+    max-height: 500px;
+    padding-right: 4px;
+
+    li button {
+      grid-template-columns: 44px minmax(0, 1fr) 34px;
+      gap: 10px;
+      padding: 8px 10px;
+    }
+
+    &__number {
+      display: none;
+    }
+
+    &__cover {
+      width: 44px;
+      height: 44px;
+    }
+
+    &__title {
+      font-size: 12px;
+    }
+
+    &__action {
+      width: 32px;
+      height: 32px;
     }
   }
 }
@@ -305,6 +389,16 @@
     0 16px 48px rgba(0, 0, 0, 0.55),
     0 0 30px rgba(255, 166, 0, 0.12);
 
+  &__engine {
+    position: fixed;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+    border: 0;
+  }
+
   &__cover {
     width: 64px;
     height: 64px;
@@ -325,6 +419,7 @@
   }
 
   &__title {
+    display: block;
     overflow: hidden;
     color: $light;
     font-size: 14px;
