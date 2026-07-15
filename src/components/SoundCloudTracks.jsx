@@ -159,7 +159,7 @@ const SoundCloudEmbeddedPlayer = ({
   );
 };
 
-const SoundCloudTracks = () => {
+const SoundCloudTracks = ({ enableParallax = false }) => {
   const {
     sounds,
     unavailableIndexes,
@@ -189,7 +189,7 @@ const SoundCloudTracks = () => {
     <Section
       id="tracks"
       className="soundcloud-tracks-section"
-      disableParallax
+      disableParallax={!enableParallax}
     >
       <div className="container">
         <Title text="SoundCloud Tracks" />

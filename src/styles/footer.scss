@@ -41,6 +41,8 @@
         // __section
         // -----------------------------------------
         &__section {
+            position: relative;
+            z-index: 2;
             margin-top: 100px;
             padding-bottom: 200px;
 

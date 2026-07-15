@@ -11,7 +11,7 @@ const Home = () => {
       <Banner />
       <FeaturedXVideo />
       <TourBanner />
-      <SoundCloudTracks />
+      <SoundCloudTracks enableParallax />
       <FooterBanner />
     </main>
   );
