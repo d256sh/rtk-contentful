@@ -1,9 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Section from "./Section/Section";
 import Title from "./Title";
 import Loader from "./Loader";
 import Icon from "./Icon";
 import { useSoundCloudPlayer } from "./SoundCloudPlayerProvider";
+import {
+  AUDIO_PLAY_EVENT,
+  notifyMediaPlayback,
+} from "../utils/common";
+
+const EMBED_PLAY_EVENT = "app:soundcloud-embed-play";
+
+const SoundCloudEmbeddedPlayer = ({ url, title, height = 166 }) => {
+  const iframeRef = useRef(null);
+  const playerIdRef = useRef(Symbol("soundcloud-player"));
+
+  useEffect(() => {
+    if (!window.SC?.Widget || !iframeRef.current) {
+      return undefined;
+    }
+
+    const widget = window.SC.Widget(iframeRef.current);
+    const handlePlay = () => {
+      notifyMediaPlayback();
+      window.dispatchEvent(
+        new CustomEvent(EMBED_PLAY_EVENT, {
+          detail: playerIdRef.current,
+        })
+      );
+    };
+    const pauseForCustomPlayer = () => widget.pause();
+    const pauseForOtherEmbed = ({ detail }) => {
+      if (detail !== playerIdRef.current) {
+        widget.pause();
+      }
+    };
+
+    widget.bind(window.SC.Widget.Events.PLAY, handlePlay);
+    window.addEventListener(AUDIO_PLAY_EVENT, pauseForCustomPlayer);
+    window.addEventListener(EMBED_PLAY_EVENT, pauseForOtherEmbed);
+
+    return () => {
+      widget.unbind(window.SC.Widget.Events.PLAY);
+      window.removeEventListener(AUDIO_PLAY_EVENT, pauseForCustomPlayer);
+      window.removeEventListener(EMBED_PLAY_EVENT, pauseForOtherEmbed);
+    };
+  }, []);
+
+  const playerUrl = `https://w.soundcloud.com/player/?url=${encodeURIComponent(
+    url
+  )}&color=%23ffa600&auto_play=false&show_artwork=true&visual=${height > 200}`;
+
+  return (
+    <iframe
+      ref={iframeRef}
+      title={title}
+      width="100%"
+      height={height}
+      scrolling="no"
+      frameBorder="0"
+      allow="autoplay; encrypted-media"
+      src={playerUrl}
+    />
+  );
+};
 
 const SoundCloudTracks = () => {
   const {
@@ -14,8 +74,12 @@ const SoundCloudTracks = () => {
     selectTrack,
     toggle,
     refreshSounds,
+    playbackError,
+    pause,
+    clearPlaybackError,
   } = useSoundCloudPlayer();
   const [visibleCount, setVisibleCount] = useState(10);
+  const [showFallbackPlayer, setShowFallbackPlayer] = useState(false);
   const availableTracks = sounds
     .map((track, index) => ({ track, index }))
     .filter(
@@ -93,6 +157,65 @@ const SoundCloudTracks = () => {
             })}
           </ul>
         )}
+
+        {playbackError?.track && (
+          <div className="soundcloud-error" role="alert">
+            <div>
+              <strong>Track playback failed</strong>
+              <p>
+                “{playbackError.track.title}” could not be played in the
+                custom player.
+              </p>
+            </div>
+
+            <div className="soundcloud-error__actions">
+              <button
+                type="button"
+                onClick={() => {
+                  pause();
+                  setShowFallbackPlayer((visible) => !visible);
+                }}
+              >
+                {showFallbackPlayer
+                  ? "Hide SoundCloud player"
+                  : "Listen in SoundCloud player"}
+              </button>
+              <button
+                type="button"
+                className="soundcloud-error__dismiss"
+                onClick={() => {
+                  setShowFallbackPlayer(false);
+                  clearPlaybackError();
+                }}
+                aria-label="Dismiss playback error"
+              >
+                ×
+              </button>
+            </div>
+
+            {showFallbackPlayer && (
+              <div className="soundcloud-error__player">
+                <SoundCloudEmbeddedPlayer
+                  key={playbackError.track.id}
+                  url={
+                    playbackError.track.permalink_url ||
+                    "https://soundcloud.com/jahseh-onfroy"
+                  }
+                  title={`Listen to ${playbackError.track.title} on SoundCloud`}
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="soundcloud-original">
+          <h3>Original SoundCloud Playlist</h3>
+          <SoundCloudEmbeddedPlayer
+            url="https://soundcloud.com/jahseh-onfroy"
+            title="XXXTENTACION original SoundCloud playlist"
+            height={450}
+          />
+        </div>
       </div>
     </Section>
   );

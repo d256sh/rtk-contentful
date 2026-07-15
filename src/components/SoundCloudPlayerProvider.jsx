@@ -31,6 +31,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
+  const [playbackError, setPlaybackError] = useState(null);
 
   const getPlayableIndex = (index, direction = 1) => {
     const nextSounds = soundsRef.current;
@@ -142,8 +143,13 @@ const SoundCloudPlayerProvider = ({ children }) => {
       setCurrentTime(currentPosition);
     const handleError = () => {
       const failedIndex = currentIndexRef.current;
+      const failedTrack = soundsRef.current[failedIndex];
       unavailableIndexesRef.current.add(failedIndex);
       setUnavailableIndexes(Array.from(unavailableIndexesRef.current));
+      setPlaybackError({
+        index: failedIndex,
+        track: failedTrack,
+      });
 
       const nextIndex = getPlayableIndex(failedIndex + 1);
 
@@ -209,6 +215,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
     currentIndex,
     currentTime,
     isPlaying,
+    playbackError,
     selectTrack,
     previous: () => selectTrack(currentIndexRef.current - 1, -1),
     next: () => selectTrack(currentIndexRef.current + 1),
@@ -221,6 +228,8 @@ const SoundCloudPlayerProvider = ({ children }) => {
       }),
     toggle: () =>
       isPlaying ? widgetRef.current?.pause() : widgetRef.current?.play(),
+    pause: () => widgetRef.current?.pause(),
+    clearPlaybackError: () => setPlaybackError(null),
     seekTo: (milliseconds) => {
       widgetRef.current?.seekTo(milliseconds);
       setCurrentTime(milliseconds);
