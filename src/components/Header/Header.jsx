@@ -34,7 +34,9 @@ const Header = () => {
                 animate="visible"
                 variants={menuItemVariants}
               >
-                <NavLink to={`/${link}`}>{name}</NavLink>
+                <NavLink to={`/${link}`} end={!link}>
+                  {name}
+                </NavLink>
               </motion.div>
             ))}
           </nav>

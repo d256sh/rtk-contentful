@@ -186,7 +186,11 @@ const SoundCloudTracks = () => {
   const visibleTracks = availableTracks.slice(0, visibleCount);
 
   return (
-    <Section className="soundcloud-tracks-section" disableParallax>
+    <Section
+      id="tracks"
+      className="soundcloud-tracks-section"
+      disableParallax
+    >
       <div className="container">
         <Title text="SoundCloud Tracks" />
 

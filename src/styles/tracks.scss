@@ -407,6 +407,12 @@
   }
 }
 
+.tracks-page {
+  .soundcloud-tracks-section {
+    padding-bottom: 180px;
+  }
+}
+
 .soundcloud-error {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

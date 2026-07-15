@@ -10,16 +10,16 @@ export const FEATURED_X_STORY_TWO_POST_URL =
 
 export const MENU = [
   {
-    name: "Music",
-    link: "#tracks",
+    name: "X",
+    link: "",
   },
   {
     name: "Last Concerts",
     link: "tour",
   },
   {
-    name: "Last News",
-    link: "news",
+    name: "Tracks",
+    link: "tracks",
   }
 ];
 
