@@ -152,7 +152,7 @@
             position: absolute;
             right: 0;
             bottom: 0;
-            z-index: 2;
+            z-index: 4;
 
             // -- Animation --
             transition: transform $transition-slow;
@@ -198,6 +198,19 @@
             justify-content: center;
             align-self: stretch; // ← на всю висоту flex-батька
             z-index: 3;
+
+            // -- 📱 Mobile --
+            @media only screen and (max-width: 750px) {
+                position: absolute;
+                top: 13%;
+                left: 0;
+                right: 0;
+                width: 100%;
+                padding-right: 0;
+                overflow: visible;
+                align-self: auto;
+                justify-content: flex-start;
+            }
         }
 
         // -----------------------------------------
