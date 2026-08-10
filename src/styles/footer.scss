@@ -2,6 +2,7 @@
 // FOOTER BANNER
 // =============================================
 .footer {
+
     &-banner {
 
         // -- Layout --
@@ -42,8 +43,7 @@
         // -----------------------------------------
         &__section {
             position: relative;
-            z-index: 2;
-            margin-top: 140px;
+            margin-top: 120px;
             padding-bottom: 124px;
 
             // -- 🖥 Tablet --
@@ -53,6 +53,7 @@
             }
 
             @media only screen and (max-width: 750px) {
+                margin-top: 60px;
                 padding-bottom: 88px;
             }
         }
@@ -63,11 +64,11 @@
         &__wrapper {
             display: flex;
             align-items: flex-end;
-            overflow: hidden;
 
             // -- 🖥 Tablet --
-            @media  (min-width: 1181px) {
-                min-height: 420px;
+            @media (min-width: 1181px) {
+                min-height: fit-content;
+                max-height: 420px;
             }
         }
 
@@ -177,11 +178,25 @@
                 @media only screen and (max-width: 750px) {
                     position: absolute;
                     left: 50%;
-                    bottom: -23px;
+                    bottom: 0;
                     width: 80%;
                     transform: translateX(-50%);
                 }
             }
+        }
+
+        // -----------------------------------------
+        // __left
+        // -----------------------------------------
+        &__left {
+            // -- Layout --
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-self: stretch; // ← на всю висоту flex-батька
+            z-index: 3;
         }
 
         // -----------------------------------------

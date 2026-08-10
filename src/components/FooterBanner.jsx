@@ -11,17 +11,27 @@ const FooterBanner = () => {
       <div className="container">
         <div className="footer-banner__wrapper">
           <Link to="/tour" className="footer-banner">
+            <div className="footer-banner__left">
+              <motion.div
+                className="footer-banner__text"
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+              >
+                <p className="footer-banner__title">XXXTENTACION</p>
+                <p className="footer-banner__subtitle">FUN CLUB</p>
+              </motion.div>
+            </div>
 
             <motion.div
-              className="footer-banner__text"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+              className="footer-banner__hand"
+              initial={{ opacity: 0, scale: 1, rotate: 0, translateY: 50 }}
+              whileInView={{ opacity: 1, scale: 1.5, rotate: 26, translateY: 20 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
             >
-              <p className="footer-banner__title">XXXTENTACION</p>
-              <p className="footer-banner__subtitle">FUN CLUB</p>
-
+              <img src={hand} alt="hand" />
             </motion.div>
 
             <motion.div
@@ -37,15 +47,7 @@ const FooterBanner = () => {
                 alt="XXX"
               />
             </motion.div>
-            <motion.div
-              className="footer-banner__hand"
-              initial={{ opacity: 0, scale: 1, rotate: 0, translateY: 50 }}
-              whileInView={{ opacity: 1, scale: 1.5, rotate: 26, translateY: 20 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
-            >
-              <img src={hand} alt="hand" />
-            </motion.div>
+
           </Link>
 
         </div>

@@ -190,6 +190,7 @@ const SoundCloudTracks = ({ enableParallax = false }) => {
       id="tracks"
       className="soundcloud-tracks-section"
       disableParallax={!enableParallax}
+      style={{ marginBottom: "250px" }}
     >
       <div className="container">
         <Title text="SoundCloud Tracks" />
@@ -220,113 +221,113 @@ const SoundCloudTracks = ({ enableParallax = false }) => {
             {!sounds.length ? (
               <Loader />
             ) : (
-          <ul
-            className="soundcloud-tracks"
-            onScroll={({ currentTarget }) => {
-              const distanceToBottom =
-                currentTarget.scrollHeight -
-                currentTarget.scrollTop -
-                currentTarget.clientHeight;
+              <ul
+                className="soundcloud-tracks"
+                onScroll={({ currentTarget }) => {
+                  const distanceToBottom =
+                    currentTarget.scrollHeight -
+                    currentTarget.scrollTop -
+                    currentTarget.clientHeight;
 
-              if (distanceToBottom < 80) {
-                setVisibleCount((count) =>
-                  Math.min(count + 10, availableTracks.length)
-                );
-                refreshSounds();
-              }
-            }}
-          >
-            {visibleTracks.map(({ track, index }) => {
-              const isCurrent = index === currentIndex;
-              const artwork =
-                track.artwork_url || track.user?.avatar_url || "";
+                  if (distanceToBottom < 80) {
+                    setVisibleCount((count) =>
+                      Math.min(count + 10, availableTracks.length)
+                    );
+                    refreshSounds();
+                  }
+                }}
+              >
+                {visibleTracks.map(({ track, index }) => {
+                  const isCurrent = index === currentIndex;
+                  const artwork =
+                    track.artwork_url || track.user?.avatar_url || "";
 
-              return (
-                <li
-                  key={track.id}
-                  className={isCurrent ? "active" : undefined}
-                >
-                  <button
-                    type="button"
-                    onClick={() =>
-                      isCurrent ? toggle() : selectTrack(index)
-                    }
-                  >
-                    <span className="soundcloud-tracks__number">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+                  return (
+                    <li
+                      key={track.id}
+                      className={isCurrent ? "active" : undefined}
+                    >
+                      <button
+                        type="button"
+                        onClick={() =>
+                          isCurrent ? toggle() : selectTrack(index)
+                        }
+                      >
+                        <span className="soundcloud-tracks__number">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
 
-                    {artwork && (
-                      <img
-                        src={artwork}
-                        alt=""
-                        className="soundcloud-tracks__cover"
-                      />
-                    )}
+                        {artwork && (
+                          <img
+                            src={artwork}
+                            alt=""
+                            className="soundcloud-tracks__cover"
+                          />
+                        )}
 
-                    <span className="soundcloud-tracks__title">
-                      {track.title}
-                    </span>
+                        <span className="soundcloud-tracks__title">
+                          {track.title}
+                        </span>
 
-                    <span className="soundcloud-tracks__action">
-                      <Icon
-                        name={isCurrent && isPlaying ? "pause" : "play"}
-                      />
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                        <span className="soundcloud-tracks__action">
+                          <Icon
+                            name={isCurrent && isPlaying ? "pause" : "play"}
+                          />
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
             )}
 
             {playbackError?.track && (
               <div className="soundcloud-error" role="alert">
-            <div>
-              <strong>Track playback failed</strong>
-              <p>
-                “{playbackError.track.title}” could not be played in the
-                custom player.
-              </p>
-            </div>
+                <div>
+                  <strong>Track playback failed</strong>
+                  <p>
+                    “{playbackError.track.title}” could not be played in the
+                    custom player.
+                  </p>
+                </div>
 
-            <div className="soundcloud-error__actions">
-              <button
-                type="button"
-                onClick={() => {
-                  pause();
-                  setShowFallbackPlayer((visible) => !visible);
-                }}
-              >
-                {showFallbackPlayer
-                  ? "Hide SoundCloud player"
-                  : "Listen in SoundCloud player"}
-              </button>
-              <button
-                type="button"
-                className="soundcloud-error__dismiss"
-                onClick={() => {
-                  setShowFallbackPlayer(false);
-                  clearPlaybackError();
-                }}
-                aria-label="Dismiss playback error"
-              >
-                ×
-              </button>
-            </div>
+                <div className="soundcloud-error__actions">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      pause();
+                      setShowFallbackPlayer((visible) => !visible);
+                    }}
+                  >
+                    {showFallbackPlayer
+                      ? "Hide SoundCloud player"
+                      : "Listen in SoundCloud player"}
+                  </button>
+                  <button
+                    type="button"
+                    className="soundcloud-error__dismiss"
+                    onClick={() => {
+                      setShowFallbackPlayer(false);
+                      clearPlaybackError();
+                    }}
+                    aria-label="Dismiss playback error"
+                  >
+                    ×
+                  </button>
+                </div>
 
-            {showFallbackPlayer && (
-              <div className="soundcloud-error__player">
-                <SoundCloudEmbeddedPlayer
-                  key={playbackError.track.id}
-                  url={
-                    playbackError.track.permalink_url ||
-                    "https://soundcloud.com/jahseh-onfroy"
-                  }
-                  title={`Listen to ${playbackError.track.title} on SoundCloud`}
-                />
-              </div>
-            )}
+                {showFallbackPlayer && (
+                  <div className="soundcloud-error__player">
+                    <SoundCloudEmbeddedPlayer
+                      key={playbackError.track.id}
+                      url={
+                        playbackError.track.permalink_url ||
+                        "https://soundcloud.com/jahseh-onfroy"
+                      }
+                      title={`Listen to ${playbackError.track.title} on SoundCloud`}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </>
@@ -336,13 +337,13 @@ const SoundCloudTracks = ({ enableParallax = false }) => {
           className="soundcloud-original"
           hidden={listView !== "original"}
         >
-            <h3>Original SoundCloud Playlist</h3>
-            <SoundCloudEmbeddedPlayer
-              url="https://soundcloud.com/jahseh-onfroy"
-              title="XXXTENTACION original SoundCloud playlist"
-              height={400}
-              synchronized
-            />
+          <h3>Original SoundCloud Playlist</h3>
+          <SoundCloudEmbeddedPlayer
+            url="https://soundcloud.com/jahseh-onfroy"
+            title="XXXTENTACION original SoundCloud playlist"
+            height={400}
+            synchronized
+          />
         </div>
       </div>
     </Section>
