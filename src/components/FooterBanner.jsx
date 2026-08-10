@@ -22,17 +22,17 @@ const FooterBanner = () => {
                 <p className="footer-banner__title">XXXTENTACION</p>
                 <p className="footer-banner__subtitle">FUN CLUB</p>
               </motion.div>
-            </div>
 
-            <motion.div
-              className="footer-banner__hand"
-              initial={{ opacity: 0, scale: 1, rotate: 0, translateY: 50 }}
-              whileInView={{ opacity: 1, scale: 1.5, rotate: 26, translateY: 20 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
-            >
-              <img src={hand} alt="hand" />
-            </motion.div>
+              <motion.div
+                className="footer-banner__hand"
+                initial={{ opacity: 0, scale: 1, rotate: 0, translateY: 50 }}
+                whileInView={{ opacity: 1, scale: 1.5, rotate: 26, translateY: 20 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
+              >
+                <img src={hand} alt="hand" />
+              </motion.div>
+            </div>
 
             <motion.div
               className="footer-banner__image"

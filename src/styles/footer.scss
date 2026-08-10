@@ -151,7 +151,7 @@
             // -- Layout --
             position: absolute;
             right: 0;
-            bottom: -23px;
+            bottom: 0;
             z-index: 2;
 
             // -- Animation --
@@ -193,6 +193,7 @@
             position: relative;
             overflow: hidden;
             display: flex;
+            padding-right: 100px;
             flex-direction: column;
             justify-content: center;
             align-self: stretch; // ← на всю висоту flex-батька
@@ -206,7 +207,7 @@
             // -- Layout --
             position: absolute;
             bottom: 0;
-            left: 30%;
+            right: 80px;
             z-index: 1;
 
             img {
