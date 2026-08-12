@@ -6,6 +6,8 @@ import hand from "../assets/images/handwhite.png";
 import x from "../assets/images/xx.png";
 
 const FooterBanner = () => {
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 750px)").matches;
+
   return (
     <Section className="footer-banner__section">
       <div className="container">
@@ -14,7 +16,7 @@ const FooterBanner = () => {
             <div className="footer-banner__left">
               <motion.div
                 className="footer-banner__text"
-                initial={{ opacity: 0, x: -50 }}
+                initial={{ opacity: 0, x: isMobile ? 0 : -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
@@ -36,7 +38,7 @@ const FooterBanner = () => {
 
             <motion.div
               className="footer-banner__image"
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: isMobile ? 0 : 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1], delay: 0.15 }}

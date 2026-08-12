@@ -25,16 +25,16 @@ export const MENU = [
 
 export const SOCIALS = [
   {
-    icon: "youtube",
-    link:
-      process.env.REACT_APP_XXXTENTACION_YOUTUBE_URL ||
-      "https://www.youtube.com/channel/UCM9r1xn6s30OnlJWb-jc3Sw",
-  },
-  {
     icon: "soundcloud",
     link:
       process.env.REACT_APP_XXXTENTACION_SOUNDCLOUD_URL ||
       "https://soundcloud.com/jahseh-onfroy",
+  },
+  {
+    icon: "youtube",
+    link:
+      process.env.REACT_APP_XXXTENTACION_YOUTUBE_URL ||
+      "https://www.youtube.com/channel/UCM9r1xn6s30OnlJWb-jc3Sw",
   },
   {
     icon: "twitter",
