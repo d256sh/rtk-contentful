@@ -153,6 +153,7 @@
             right: 0;
             bottom: 0;
             z-index: 4;
+            pointer-events: none;
 
             // -- Animation --
             transition: transform $transition-slow;
