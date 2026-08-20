@@ -23,7 +23,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "devcontainer:up": "npx -y @devcontainers/cli up --workspace-folder .",
+    "devcontainer:start": "npx -y @devcontainers/cli exec --workspace-folder . yarn start",
+    "devcontainer:exec": "npx -y @devcontainers/cli exec --workspace-folder . bash",
+    "devcontainer:stop": "docker stop $(docker ps -q --filter label=devcontainer.local_folder)"
   },
   "eslintConfig": {
     "extends": [

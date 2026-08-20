@@ -1,0 +1,62 @@
+{
+  "name": "music-fan-share · React Dev",
+
+  // Офіційний образ Node.js 20 LTS від Microsoft Dev Containers
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20",
+
+  // Пробрасуємо порт CRA dev-сервера
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "React App",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  // Встановлюємо залежності після створення контейнера
+  "postCreateCommand": "yarn install",
+
+  // Запускаємо dev-сервер при старті контейнера
+  // (можна прибрати, якщо хочете запускати вручну)
+  // "postStartCommand": "yarn start",
+
+  // Непривілейований користувач всередині контейнера
+  "remoteUser": "node",
+
+  // VS Code розширення та налаштування
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "dsznajder.es7-react-js-snippets",
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "pkief.material-icon-theme"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "editor.tabSize": 2,
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "npm.packageManager": "yarn"
+      }
+    }
+  },
+
+  // CHOKIDAR_USEPOLLING — надійний hot-reload всередині Docker на Windows/macOS
+  "remoteEnv": {
+    "CHOKIDAR_USEPOLLING": "true",
+    "CHOKIDAR_INTERVAL": "300"
+  },
+
+  // Монтуємо .env файл проекту (якщо є) як bind-mount
+  "mounts": [
+    "source=${localWorkspaceFolder}/.env,target=/workspaces/rtk-contentful/.env,type=bind,consistency=cached"
+  ]
+}
