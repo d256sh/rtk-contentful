@@ -505,17 +505,17 @@
 
 .floating-player {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
-  left: 20px;
-  z-index: 600;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 9999;
   display: grid;
   grid-template-columns: 64px minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px;
-  width: min(760px, calc(100% - 40px));
+  width: calc(100% - 40px);
+  max-width: 760px;
   min-height: 84px;
-  margin: 0 auto;
   padding: 10px 14px;
   @include glass($panel-dark-92, $action-28, 24px);
   border-radius: $radius-lg;
@@ -641,9 +641,7 @@
   }
 
   @media only screen and (max-width: 750px) {
-    right: 10px;
-    bottom: 10px;
-    left: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
     grid-template-columns: 48px minmax(0, 1fr) auto;
     gap: 10px;
     width: calc(100% - 20px);
