@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useCallback, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const HASH_KEY = "ids";
@@ -25,74 +25,56 @@ export const decodePlaylist = (hash) => {
 export const useSharePlaylist = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const skipNextHashSync = useRef(false);
 
-  const [selectedIds, setSelectedIds] = useState(() =>
-    decodePlaylist(location.hash)
+  // URL is the Single Source of Truth. No useEffect syncing needed!
+  const selectedIds = useMemo(() => decodePlaylist(location.hash), [location.hash]);
+
+  const updateHash = useCallback(
+    (newIds) => {
+      const newHash = encodePlaylist(newIds);
+      if (location.hash !== newHash) {
+        navigate({ hash: newHash }, { replace: true });
+      }
+    },
+    [location.hash, navigate]
   );
 
-  // Sync hash → state when URL changes externally (e.g. browser back/forward)
-  useEffect(() => {
-    if (skipNextHashSync.current) {
-      skipNextHashSync.current = false;
-      return;
-    }
+  const addTrack = useCallback(
+    (index) => {
+      if (selectedIds.includes(index)) return;
+      updateHash([...selectedIds, index]);
+    },
+    [selectedIds, updateHash]
+  );
 
-    const fromHash = decodePlaylist(location.hash);
-    setSelectedIds((prev) => {
-      if (
-        prev.length === fromHash.length &&
-        prev.every((id, i) => id === fromHash[i])
-      ) {
-        return prev;
-      }
-      return fromHash;
-    });
-  }, [location.hash]);
+  const removeTrack = useCallback(
+    (index) => {
+      updateHash(selectedIds.filter((id) => id !== index));
+    },
+    [selectedIds, updateHash]
+  );
 
-  // Sync state → hash when selectedIds change
-  useEffect(() => {
-    const newHash = encodePlaylist(selectedIds);
-    const currentHash = window.location.hash || "";
-
-    if (newHash !== currentHash) {
-      skipNextHashSync.current = true;
-      navigate({ hash: newHash }, { replace: true });
-    }
-  }, [selectedIds, navigate]);
-
-  const addTrack = useCallback((index) => {
-    setSelectedIds((prev) => {
-      if (prev.includes(index)) return prev;
-      return [...prev, index];
-    });
-  }, []);
-
-  const removeTrack = useCallback((index) => {
-    setSelectedIds((prev) => prev.filter((id) => id !== index));
-  }, []);
-
-  const moveTrack = useCallback((fromPos, toPos) => {
-    setSelectedIds((prev) => {
+  const moveTrack = useCallback(
+    (fromPos, toPos) => {
       if (
         fromPos < 0 ||
-        fromPos >= prev.length ||
+        fromPos >= selectedIds.length ||
         toPos < 0 ||
-        toPos >= prev.length
+        toPos >= selectedIds.length
       ) {
-        return prev;
+        return;
       }
-
-      const next = [...prev];
+      const next = [...selectedIds];
       const [moved] = next.splice(fromPos, 1);
       next.splice(toPos, 0, moved);
-      return next;
-    });
-  }, []);
+      updateHash(next);
+    },
+    [selectedIds, updateHash]
+  );
 
   const clearAll = useCallback(() => {
-    setSelectedIds([]);
-  }, []);
+    updateHash([]);
+  }, [updateHash]);
 
   const hasTrack = useCallback(
     (index) => selectedIds.includes(index),
