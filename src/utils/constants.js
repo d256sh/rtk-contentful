@@ -18,8 +18,8 @@ export const MENU = [
     link: "tour",
   },
   {
-    name: "Tracks",
-    link: "tracks",
+    name: "Share",
+    link: "share",
   }
 ];
 

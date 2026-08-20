@@ -5,22 +5,19 @@ import FooterBanner from "../components/FooterBanner";
 import FeaturedXVideo from "../components/FeaturedXVideo";
 import SoundCloudTracks from "../components/SoundCloudTracks";
 
-const Home = ({ tracksOnly = false }) => {
+const Home = () => {
   return (
-    <main className={`main${tracksOnly ? " tracks-page" : ""}`}>
-      <div hidden={tracksOnly}>
-        <Banner />
-        <FeaturedXVideo />
-        <TourBanner />
-      </div>
+    <main className="main">
+      <Banner />
+      <FeaturedXVideo />
+      <TourBanner />
 
-      <SoundCloudTracks enableParallax={!tracksOnly} />
+      <SoundCloudTracks enableParallax />
 
-      <div hidden={tracksOnly}>
-        <FooterBanner />
-      </div>
+      <FooterBanner />
     </main>
   );
 };
 
 export default Home;
+

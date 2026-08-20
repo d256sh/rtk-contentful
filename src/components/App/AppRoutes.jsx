@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "../../pages/Home";
 import PastTours from "../../pages/PastTours";
+import SharePage from "../../pages/SharePage";
 
 const AppRoutes = () => {
   const { pathname } = useLocation();
   const isHome = pathname === "/";
-  const isTracksPage = pathname === "/tracks";
-  const isMediaPage = isHome || isTracksPage;
+  const isSharePage = pathname === "/share";
+  const isMediaPage = isHome;
   const [hasMountedMediaPage, setHasMountedMediaPage] = useState(isMediaPage);
 
   useEffect(() => {
@@ -20,17 +21,18 @@ const AppRoutes = () => {
     <>
       {hasMountedMediaPage && (
         <div hidden={!isMediaPage}>
-          <Home tracksOnly={isTracksPage} />
+          <Home />
         </div>
       )}
 
       <Routes>
         <Route index element={null} />
         <Route path="tour" element={<PastTours />} />
-        <Route path="tracks" element={null} />
+        <Route path="share" element={<SharePage />} />
       </Routes>
     </>
   );
 };
 
 export default AppRoutes;
+

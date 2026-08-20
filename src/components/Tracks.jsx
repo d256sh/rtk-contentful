@@ -101,10 +101,10 @@ const Tracks = () => {
         )}
 
         <Link
-          to="/tracks"
+          to="/share"
           className="button-more"
         >
-          All Tracks {">"}
+          Create Playlist {">"}
         </Link>
       </div>
     </Section>
