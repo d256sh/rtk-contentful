@@ -526,8 +526,9 @@
   &__engine {
     position: fixed;
     left: -9999px;
-    width: 1px;
-    height: 1px;
+    top: -9999px;
+    width: 500px;
+    height: 20000px;
     opacity: 0;
     pointer-events: none;
     border: 0;

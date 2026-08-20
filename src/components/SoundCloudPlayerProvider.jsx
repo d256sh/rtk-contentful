@@ -13,7 +13,7 @@ import {
 
 const WIDGET_API_URL = "https://w.soundcloud.com/player/api.js";
 const PLAYER_URL =
-  "https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Fusers%2F48084634%3Flimit%3D200&auto_play=false&hide_related=true&show_comments=false&show_reposts=false";
+  "https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Fusers%2F48084634%3Flimit%3D500&auto_play=false&hide_related=true&show_comments=false&show_reposts=false";
 
 const SoundCloudPlayerContext = createContext(null);
 
@@ -308,12 +308,16 @@ const SoundCloudPlayerProvider = ({ children }) => {
       refreshTimers.forEach(window.clearTimeout);
 
       if (widget && window.SC?.Widget) {
-        widget.unbind(window.SC.Widget.Events.READY);
-        widget.unbind(window.SC.Widget.Events.PLAY);
-        widget.unbind(window.SC.Widget.Events.PAUSE);
-        widget.unbind(window.SC.Widget.Events.PLAY_PROGRESS);
-        widget.unbind(window.SC.Widget.Events.ERROR);
-        widget.unbind(window.SC.Widget.Events.FINISH);
+        try {
+          widget.unbind(window.SC.Widget.Events.READY);
+          widget.unbind(window.SC.Widget.Events.PLAY);
+          widget.unbind(window.SC.Widget.Events.PAUSE);
+          widget.unbind(window.SC.Widget.Events.PLAY_PROGRESS);
+          widget.unbind(window.SC.Widget.Events.ERROR);
+          widget.unbind(window.SC.Widget.Events.FINISH);
+        } catch (e) {
+          // Ignore errors during unmount (e.g., iframe.contentWindow is null)
+        }
       }
     };
   }, []);
@@ -335,11 +339,15 @@ const SoundCloudPlayerProvider = ({ children }) => {
     }
 
     widgetRef.current = hiddenWidgetRef.current;
-    hiddenWidgetRef.current.skip(currentIndexRef.current);
-    hiddenWidgetRef.current.seekTo(currentTimeRef.current);
+    try {
+      hiddenWidgetRef.current.skip(currentIndexRef.current);
+      hiddenWidgetRef.current.seekTo(currentTimeRef.current);
 
-    if (isPlayingRef.current) {
-      hiddenWidgetRef.current.play();
+      if (isPlayingRef.current) {
+        hiddenWidgetRef.current.play();
+      }
+    } catch (e) {
+      // Ignore errors during unmount
     }
   };
 
@@ -412,7 +420,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
         className="floating-player__engine"
         title="SoundCloud playback engine"
         src={PLAYER_URL}
-        allow="autoplay"
+        allow="autoplay; encrypted-media"
       />
       {children}
     </SoundCloudPlayerContext.Provider>
