@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import hand from "../assets/images/handwhite.png";
 import x from "../assets/images/xx.png";
 
-const FooterBanner = () => {
+const FooterBanner = ({ fullWidth = false }) => {
   const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 750px)").matches;
 
   return (
     <Section className="footer-banner__section">
-      <div className="container">
+      <div className={fullWidth ? "footer-banner__full" : "container"}>
         <div className="footer-banner__wrapper">
           <Link to="/tour" className="footer-banner">
             <div className="footer-banner__left">
