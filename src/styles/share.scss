@@ -39,7 +39,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 32px;
-    align-items: start;
+    align-items: stretch;
     width: 100%;
     box-sizing: border-box;
 
@@ -398,6 +398,7 @@
   // Empty state
   &__empty-state {
     @include flexcenter;
+    flex: 1;
     flex-direction: column;
     padding: 60px 32px;
     text-align: center;

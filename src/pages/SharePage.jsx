@@ -18,9 +18,7 @@ const SharePage = () => {
           <p className="share-page__subtitle">
             Pick your favorite tracks, arrange them your way, and share the link with friends
           </p>
-          <ShareButton count={count} />
         </div>
-
         <div className="share-page__grid">
           <TrackBrowser
             hasTrack={hasTrack}
@@ -34,6 +32,10 @@ const SharePage = () => {
             onMove={moveTrack}
             onClear={clearAll}
           />
+        </div>
+
+        <div className="share-page__footer" style={{ display: 'flex', justifyContent: 'center', marginTop: '48px' }}>
+          <ShareButton count={count} />
         </div>
       </div>
     </main>
