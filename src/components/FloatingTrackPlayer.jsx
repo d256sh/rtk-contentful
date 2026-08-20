@@ -1,6 +1,7 @@
 import React from "react";
 import Icon from "./Icon";
 import { useSoundCloudPlayer } from "./SoundCloudPlayerProvider";
+import { useSharePlaylist } from "../hooks/useSharePlaylist";
 
 const formatTime = (milliseconds) => {
   const totalSeconds = Math.floor(milliseconds / 1000);
@@ -19,7 +20,10 @@ const FloatingTrackPlayer = () => {
     next,
     toggle,
     seekTo,
+    currentIndex,
   } = useSoundCloudPlayer();
+
+  const { hasTrack, addTrack, removeTrack } = useSharePlaylist();
 
   if (!currentTrack) {
     return null;
@@ -85,6 +89,15 @@ const FloatingTrackPlayer = () => {
           aria-label="Next SoundCloud track"
         >
           <Icon name="arrow-right" />
+        </button>
+        <button
+          type="button"
+          className={`floating-player__add-btn ${hasTrack(currentIndex) ? 'added' : ''}`}
+          onClick={() => (hasTrack(currentIndex) ? removeTrack(currentIndex) : addTrack(currentIndex))}
+          aria-label={hasTrack(currentIndex) ? "Remove from playlist" : "Add to playlist"}
+          style={{ fontSize: "18px", lineHeight: 0, padding: 0 }}
+        >
+          {hasTrack(currentIndex) ? "✓" : "+"}
         </button>
       </div>
     </aside>
