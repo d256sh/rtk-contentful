@@ -15,7 +15,7 @@ const formatTime = (milliseconds) => {
 
 const FloatingTrackPlayer = () => {
   const { pathname } = useLocation();
-  const isSharedPage = pathname.startsWith("/shared");
+  const isSharePage = pathname.startsWith("/share") && !pathname.startsWith("/shared");
 
   const {
     currentTrack,
@@ -96,7 +96,7 @@ const FloatingTrackPlayer = () => {
         >
           <Icon name="arrow-right" />
         </button>
-        {!isSharedPage && (
+        {isSharePage && (
           <button
             type="button"
             className={`floating-player__add-btn ${hasTrack(currentIndex) ? 'added' : ''}`}

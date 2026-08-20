@@ -211,7 +211,6 @@ const SoundCloudPlayerProvider = ({ children }) => {
       setCurrentTrack(currentSounds[defaultIndex]);
       setCurrentTime(0);
       widgetRef.current?.skip(defaultIndex);
-      widgetRef.current?.play();
     };
 
     const handleReady = () => {
