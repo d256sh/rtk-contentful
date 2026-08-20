@@ -22,7 +22,7 @@ const FooterBanner = ({ fullWidth = false }) => {
                 transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
               >
                 <p className="footer-banner__title">XXXTENTACION</p>
-                <p className="footer-banner__subtitle">FUN CLUB</p>
+                <p className="footer-banner__subtitle">FAN SPACE</p>
               </motion.div>
 
               <motion.div
