@@ -13,7 +13,7 @@ import {
 
 const WIDGET_API_URL = "https://w.soundcloud.com/player/api.js";
 const PLAYER_URL =
-  "https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Fusers%2F48084634&auto_play=false&hide_related=true&show_comments=false&show_reposts=false";
+  "https://w.soundcloud.com/player/?url=https%3A%2F%2Fapi.soundcloud.com%2Fusers%2F48084634%3Flimit%3D200&auto_play=false&hide_related=true&show_comments=false&show_reposts=false";
 
 const SoundCloudPlayerContext = createContext(null);
 
@@ -37,6 +37,8 @@ const SoundCloudPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [playbackError, setPlaybackError] = useState(null);
+
+  const isSkippingRef = useRef(false);
 
   const getPlayableIndex = (index, direction = 1) => {
     const nextSounds = soundsRef.current;
@@ -70,13 +72,37 @@ const SoundCloudPlayerProvider = ({ children }) => {
       return;
     }
 
+    const track = soundsRef.current[nextIndex];
+    
+    // Optimistically update our UI state
     currentIndexRef.current = nextIndex;
     currentTimeRef.current = 0;
     setCurrentIndex(nextIndex);
-    setCurrentTrack(soundsRef.current[nextIndex]);
+    setCurrentTrack(track);
     setCurrentTime(0);
+    
+    isSkippingRef.current = true;
+    
+    // Try skipping (fastest if track is already loaded in widget's internal DOM)
     widgetRef.current.skip(nextIndex);
     widgetRef.current.play();
+
+    // Verify if skip actually worked (SC widget ignores skip if track is too far ahead)
+    setTimeout(() => {
+      if (widgetRef.current) {
+        widgetRef.current.getCurrentSoundIndex((actualIndex) => {
+          // If the widget didn't change to our requested index, force load it
+          if (actualIndex !== currentIndexRef.current) {
+            widgetRef.current.load(track.permalink_url || track.uri, { auto_play: true });
+          }
+          
+          // Reset the skipping flag after a short delay to allow load/play events to settle
+          setTimeout(() => {
+            isSkippingRef.current = false;
+          }, 500);
+        });
+      }
+    }, 300);
   };
 
   useEffect(() => {
@@ -85,12 +111,20 @@ const SoundCloudPlayerProvider = ({ children }) => {
     const refreshTimers = [];
 
     const updateCurrentTrack = () => {
+      if (isSkippingRef.current) {
+        return;
+      }
       widget?.getCurrentSound((sound) => {
         if (sound) {
           setCurrentTrack(sound);
         }
       });
       widget?.getCurrentSoundIndex((index) => {
+        // If we used widget.load(), the internal playlist has 1 track (index 0).
+        // We shouldn't overwrite our actual currentIndex with 0 in this case.
+        if (index === 0 && currentIndexRef.current !== 0) {
+          return;
+        }
         currentIndexRef.current = index;
         setCurrentIndex(index);
       });
@@ -98,7 +132,8 @@ const SoundCloudPlayerProvider = ({ children }) => {
 
     const handleReady = () => {
       widget.getSounds((nextSounds) => {
-        if (!nextSounds?.length) {
+        // Prevent overwriting the full playlist if widget.load() was used (which returns only 1 track)
+        if (!nextSounds?.length || (soundsRef.current.length > 0 && nextSounds.length < soundsRef.current.length)) {
           return;
         }
 
@@ -199,6 +234,38 @@ const SoundCloudPlayerProvider = ({ children }) => {
         widget.play();
       }
     };
+    const handleFinish = () => {
+      if (widgetRef.current !== widget) {
+        return;
+      }
+      
+      // Auto-advance to the next playable track
+      const failedIndex = currentIndexRef.current;
+      const nextIndex = getPlayableIndex(failedIndex + 1);
+
+      if (nextIndex !== null) {
+        currentIndexRef.current = nextIndex;
+        currentTimeRef.current = 0;
+        setCurrentIndex(nextIndex);
+        setCurrentTrack(soundsRef.current[nextIndex]);
+        setCurrentTime(0);
+        
+        const track = soundsRef.current[nextIndex];
+        widget.skip(nextIndex);
+        widget.play();
+        
+        setTimeout(() => {
+          if (widgetRef.current) {
+            widgetRef.current.getCurrentSoundIndex((actualIndex) => {
+              if (actualIndex !== currentIndexRef.current) {
+                widgetRef.current.load(track.permalink_url || track.uri, { auto_play: true });
+              }
+            });
+          }
+        }, 300);
+      }
+    };
+
     const pauseForMedia = () => {
       pausedForMediaRef.current = true;
       widgetRef.current?.pause();
@@ -217,6 +284,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
       widget.bind(window.SC.Widget.Events.PAUSE, handlePause);
       widget.bind(window.SC.Widget.Events.PLAY_PROGRESS, handleProgress);
       widget.bind(window.SC.Widget.Events.ERROR, handleError);
+      widget.bind(window.SC.Widget.Events.FINISH, handleFinish);
       window.addEventListener(MEDIA_PLAY_EVENT, pauseForMedia);
     };
 
@@ -245,6 +313,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
         widget.unbind(window.SC.Widget.Events.PAUSE);
         widget.unbind(window.SC.Widget.Events.PLAY_PROGRESS);
         widget.unbind(window.SC.Widget.Events.ERROR);
+        widget.unbind(window.SC.Widget.Events.FINISH);
       }
     };
   }, []);
