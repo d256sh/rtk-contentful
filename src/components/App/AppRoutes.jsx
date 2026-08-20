@@ -7,7 +7,6 @@ import SharePage from "../../pages/SharePage";
 const AppRoutes = () => {
   const { pathname } = useLocation();
   const isHome = pathname === "/";
-  const isSharePage = pathname === "/share";
   const isMediaPage = isHome;
   const [hasMountedMediaPage, setHasMountedMediaPage] = useState(isMediaPage);
 

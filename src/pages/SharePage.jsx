@@ -41,3 +41,5 @@ const SharePage = () => {
 };
 
 export default SharePage;
+
+// Trigger HMR

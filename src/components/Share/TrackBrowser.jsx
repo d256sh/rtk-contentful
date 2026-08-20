@@ -10,10 +10,10 @@ const SearchIcon = () => (
 );
 
 const TrackBrowser = ({ hasTrack, onAdd, onRemove }) => {
-  const { sounds, unavailableIndexes, currentIndex, isPlaying, selectTrack, toggle } =
+  const { sounds, unavailableIndexes, currentIndex, isPlaying, selectTrack, toggle, refreshSounds } =
     useSoundCloudPlayer();
   const [search, setSearch] = useState("");
-  const [visibleCount, setVisibleCount] = useState(20);
+  const [visibleCount, setVisibleCount] = useState(50);
 
   const availableTracks = useMemo(() => {
     return sounds
@@ -51,7 +51,7 @@ const TrackBrowser = ({ hasTrack, onAdd, onRemove }) => {
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
-            setVisibleCount(20);
+            setVisibleCount(50);
           }}
           className="share-browser__input"
         />
@@ -76,6 +76,10 @@ const TrackBrowser = ({ hasTrack, onAdd, onRemove }) => {
             currentTarget.clientHeight;
           if (distanceToBottom < 80) {
             setVisibleCount((c) => Math.min(c + 20, filtered.length));
+            // Force the widget to give us more loaded tracks
+            if (typeof refreshSounds === 'function') {
+              refreshSounds();
+            }
           }
         }}
       >
