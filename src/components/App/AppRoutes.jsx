@@ -3,6 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "../../pages/Home";
 import PastTours from "../../pages/PastTours";
 import SharePage from "../../pages/SharePage";
+import SharedPlaylistPage from "../../pages/SharedPlaylistPage";
 
 const AppRoutes = () => {
   const { pathname } = useLocation();
@@ -28,6 +29,7 @@ const AppRoutes = () => {
         <Route index element={null} />
         <Route path="tour" element={<PastTours />} />
         <Route path="share" element={<SharePage />} />
+        <Route path="shared" element={<SharedPlaylistPage />} />
       </Routes>
     </>
   );
