@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useSoundCloudPlayer } from "../components/SoundCloudPlayerProvider";
 import { useSharePlaylist } from "../hooks/useSharePlaylist";
 import Icon from "../components/Icon";

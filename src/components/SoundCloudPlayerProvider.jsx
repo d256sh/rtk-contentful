@@ -42,7 +42,6 @@ const SoundCloudPlayerProvider = ({ children }) => {
   const isSkippingRef = useRef(false);
 
   const currentContextIdsRef = useRef(null);
-  const [currentContextIds, setCurrentContextIds] = useState(null);
 
   const getPlayableIndex = (index, direction = 1, contextIds = currentContextIdsRef.current, isSkip = false) => {
     const nextSounds = soundsRef.current;
@@ -104,9 +103,8 @@ const SoundCloudPlayerProvider = ({ children }) => {
     }
 
     // If they clicked a track explicitly (not skipping), update the context
-    if (!isSkip && contextIds !== currentContextIdsRef.current) {
+    if (contextIds) {
       currentContextIdsRef.current = contextIds;
-      setCurrentContextIds(contextIds);
     }
 
     const nextIndex = getPlayableIndex(index, direction, contextIds, isSkip);
@@ -457,7 +455,6 @@ const SoundCloudPlayerProvider = ({ children }) => {
       // Since external tracks are always the global list (the embedded playlist), clear any custom context
       if (currentContextIdsRef.current !== null) {
         currentContextIdsRef.current = null;
-        setCurrentContextIds(null);
       }
 
       setCurrentIndex(index);
