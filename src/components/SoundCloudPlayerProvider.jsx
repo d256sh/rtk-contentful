@@ -184,22 +184,33 @@ const SoundCloudPlayerProvider = ({ children }) => {
         setSounds(nextSounds);
         initPlayer(nextSounds, false);
 
-        [400, 1000, 2000, 4000].forEach((delay) => {
+        let unchangedCount = 0;
+        const pollTracks = () => {
           refreshTimers.push(
             window.setTimeout(() => {
               widget.getSounds((refreshedSounds) => {
-                if (refreshedSounds?.length > soundsRef.current.length) {
+                const currentLength = soundsRef.current.length;
+                if (refreshedSounds?.length > currentLength) {
                   soundsRef.current = refreshedSounds;
                   setSounds(refreshedSounds);
                   initPlayer(refreshedSounds, false);
-                } else if (delay === 4000) {
-                  // Force initialization on the last timer if it hasn't happened yet
-                  initPlayer(soundsRef.current, true);
+                  unchangedCount = 0; // reset counter since it grew
+                  pollTracks(); // keep polling
+                } else {
+                  unchangedCount++;
+                  if (unchangedCount < 5) {
+                    // Try a few more times to be sure it's fully loaded
+                    pollTracks();
+                  } else {
+                    // Force initialization if it hasn't happened yet
+                    initPlayer(soundsRef.current, true);
+                  }
                 }
               });
-            }, delay)
+            }, 1000)
           );
-        });
+        };
+        pollTracks();
       });
     };
 
