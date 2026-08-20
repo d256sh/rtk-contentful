@@ -94,7 +94,7 @@ const TrackBrowser = ({ hasTrack, onAdd, onRemove }) => {
               <button
                 type="button"
                 className="share-browser__play"
-                onClick={() => (isCurrent ? toggle() : selectTrack(index))}
+                onClick={() => (isCurrent ? toggle() : selectTrack(index, 1, null))}
                 aria-label={isCurrent && isPlaying ? "Pause" : "Play"}
               >
                 <img 

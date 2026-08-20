@@ -41,10 +41,46 @@ const SoundCloudPlayerProvider = ({ children }) => {
 
   const isSkippingRef = useRef(false);
 
-  const getPlayableIndex = (index, direction = 1) => {
-    const nextSounds = soundsRef.current;
+  const currentContextIdsRef = useRef(null);
+  const [currentContextIds, setCurrentContextIds] = useState(null);
 
-    for (let offset = 0; offset < nextSounds.length; offset += 1) {
+  const getPlayableIndex = (index, direction = 1, contextIds = currentContextIdsRef.current, isSkip = false) => {
+    const nextSounds = soundsRef.current;
+    
+    // If we are skipping, we want to look at the NEXT track (offset = 1)
+    // If we are selecting a specific track, we want to look at THAT track (offset = 0)
+    const startOffset = isSkip ? 1 : 0;
+    
+    // If we have a specific context (like a custom playlist), cycle through those IDs
+    if (contextIds && contextIds.length > 0) {
+      // Find where we are in the context list (if we are in it)
+      let posIndex = contextIds.indexOf(index);
+      
+      // If the current track isn't in the context list, default to the first track in context
+      if (posIndex === -1) {
+        posIndex = direction === 1 ? -1 : 0; // offset will fix this to 0 or length-1
+      }
+
+      for (let offset = startOffset; offset <= contextIds.length; offset += 1) {
+        const candidatePos =
+          (posIndex + offset * direction + contextIds.length) %
+          contextIds.length;
+        const candidateId = contextIds[candidatePos];
+        const sound = nextSounds[candidateId];
+
+        if (
+          sound?.streamable !== false &&
+          sound?.policy !== "BLOCK" &&
+          !unavailableIndexesRef.current.has(candidateId)
+        ) {
+          return candidateId;
+        }
+      }
+      return null;
+    }
+
+    // Otherwise, fallback to the global list
+    for (let offset = startOffset; offset < nextSounds.length; offset += 1) {
       const candidate =
         (index + offset * direction + nextSounds.length) %
         nextSounds.length;
@@ -62,12 +98,18 @@ const SoundCloudPlayerProvider = ({ children }) => {
     return null;
   };
 
-  const selectTrack = (index, direction = 1) => {
+  const selectTrack = (index, direction = 1, contextIds = currentContextIdsRef.current, isSkip = false) => {
     if (!soundsRef.current.length || !widgetRef.current) {
       return;
     }
 
-    const nextIndex = getPlayableIndex(index, direction);
+    // If they clicked a track explicitly (not skipping), update the context
+    if (!isSkip && contextIds !== currentContextIdsRef.current) {
+      currentContextIdsRef.current = contextIds;
+      setCurrentContextIds(contextIds);
+    }
+
+    const nextIndex = getPlayableIndex(index, direction, contextIds, isSkip);
 
     if (nextIndex === null) {
       return;
@@ -263,7 +305,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
         track: failedTrack,
       });
 
-      const nextIndex = getPlayableIndex(failedIndex + 1);
+      const nextIndex = getPlayableIndex(failedIndex, 1, currentContextIdsRef.current, true);
 
       if (nextIndex !== null) {
         currentIndexRef.current = nextIndex;
@@ -284,7 +326,7 @@ const SoundCloudPlayerProvider = ({ children }) => {
       
       // Auto-advance to the next playable track
       const failedIndex = currentIndexRef.current;
-      const nextIndex = getPlayableIndex(failedIndex + 1);
+      const nextIndex = getPlayableIndex(failedIndex, 1, currentContextIdsRef.current, true);
 
       if (nextIndex !== null) {
         currentIndexRef.current = nextIndex;
@@ -411,6 +453,13 @@ const SoundCloudPlayerProvider = ({ children }) => {
         setCurrentTime(0);
       }
       currentIndexRef.current = index;
+      
+      // Since external tracks are always the global list (the embedded playlist), clear any custom context
+      if (currentContextIdsRef.current !== null) {
+        currentContextIdsRef.current = null;
+        setCurrentContextIds(null);
+      }
+
       setCurrentIndex(index);
       setCurrentTrack(track);
     },
@@ -436,8 +485,8 @@ const SoundCloudPlayerProvider = ({ children }) => {
       currentTimeRef.current = milliseconds;
       setCurrentTime(milliseconds);
     },
-    previous: () => selectTrack(currentIndexRef.current - 1, -1),
-    next: () => selectTrack(currentIndexRef.current + 1),
+    previous: () => selectTrack(currentIndexRef.current, -1, currentContextIdsRef.current, true),
+    next: () => selectTrack(currentIndexRef.current, 1, currentContextIdsRef.current, true),
     refreshSounds: () =>
       widgetRef.current?.getSounds((nextSounds) => {
         if (nextSounds?.length > soundsRef.current.length) {

@@ -1,4 +1,5 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import Icon from "./Icon";
 import { useSoundCloudPlayer } from "./SoundCloudPlayerProvider";
 import { useSharePlaylist } from "../hooks/useSharePlaylist";
@@ -13,6 +14,9 @@ const formatTime = (milliseconds) => {
 };
 
 const FloatingTrackPlayer = () => {
+  const { pathname } = useLocation();
+  const isSharedPage = pathname.startsWith("/shared");
+
   const {
     currentTrack,
     currentTime,
@@ -92,15 +96,17 @@ const FloatingTrackPlayer = () => {
         >
           <Icon name="arrow-right" />
         </button>
-        <button
-          type="button"
-          className={`floating-player__add-btn ${hasTrack(currentIndex) ? 'added' : ''}`}
-          onClick={() => (hasTrack(currentIndex) ? removeTrack(currentIndex) : addTrack(currentIndex))}
-          aria-label={hasTrack(currentIndex) ? "Remove from playlist" : "Add to playlist"}
-          style={{ fontSize: "18px", lineHeight: 0, padding: 0 }}
-        >
-          {hasTrack(currentIndex) ? "✓" : "+"}
-        </button>
+        {!isSharedPage && (
+          <button
+            type="button"
+            className={`floating-player__add-btn ${hasTrack(currentIndex) ? 'added' : ''}`}
+            onClick={() => (hasTrack(currentIndex) ? removeTrack(currentIndex) : addTrack(currentIndex))}
+            aria-label={hasTrack(currentIndex) ? "Remove from playlist" : "Add to playlist"}
+            style={{ fontSize: "18px", lineHeight: 0, padding: 0 }}
+          >
+            {hasTrack(currentIndex) ? "✓" : "+"}
+          </button>
+        )}
       </div>
     </aside>
   );

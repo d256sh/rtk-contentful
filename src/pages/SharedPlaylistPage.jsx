@@ -59,7 +59,7 @@ const SharedPlaylistPage = () => {
                       <button
                         type="button"
                         className="share-playlist__play"
-                        onClick={() => (isCurrent ? toggle() : selectTrack(soundIndex))}
+                        onClick={() => (isCurrent ? toggle() : selectTrack(soundIndex, 1, selectedIds))}
                         aria-label={isCurrent && isPlaying ? "Pause" : "Play"}
                       >
                         <img 

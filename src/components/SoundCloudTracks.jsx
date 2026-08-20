@@ -250,7 +250,7 @@ const SoundCloudTracks = ({ enableParallax = false }) => {
                       <button
                         type="button"
                         onClick={() =>
-                          isCurrent ? toggle() : selectTrack(index)
+                          isCurrent ? toggle() : selectTrack(index, 1, null)
                         }
                       >
                         <span className="soundcloud-tracks__number">
