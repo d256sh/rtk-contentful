@@ -10,6 +10,7 @@ import {
   notifyAudioPause,
   notifyAudioPlayback,
 } from "../utils/common";
+import { decodePlaylist } from "../hooks/useSharePlaylist";
 
 const WIDGET_API_URL = "https://w.soundcloud.com/player/api.js";
 const PLAYER_URL =
@@ -130,33 +131,58 @@ const SoundCloudPlayerProvider = ({ children }) => {
       });
     };
 
+    let initialized = false;
+
+    const initPlayer = (currentSounds, force = false) => {
+      if (initialized) return;
+
+      const playableIndexes = currentSounds.reduce((indexes, sound, index) => {
+        if (sound.streamable !== false && sound.policy !== "BLOCK") {
+          indexes.push(index);
+        }
+        return indexes;
+      }, []);
+
+      const sharedPlaylistIds = decodePlaylist(window.location.hash);
+      
+      if (sharedPlaylistIds.length > 0) {
+        const targetId = sharedPlaylistIds[0];
+        // If the target track hasn't loaded yet, wait for subsequent getSounds calls (unless forced)
+        if (!force && targetId >= currentSounds.length) {
+          return;
+        }
+      }
+
+      initialized = true;
+      let defaultIndex;
+
+      if (sharedPlaylistIds.length > 0 && playableIndexes.includes(sharedPlaylistIds[0])) {
+        defaultIndex = sharedPlaylistIds[0];
+      } else {
+        defaultIndex =
+          playableIndexes[
+            Math.floor(Math.random() * playableIndexes.length)
+          ] ?? 0;
+      }
+
+      currentIndexRef.current = defaultIndex;
+      currentTimeRef.current = 0;
+      setCurrentIndex(defaultIndex);
+      setCurrentTrack(currentSounds[defaultIndex]);
+      setCurrentTime(0);
+      widgetRef.current?.skip(defaultIndex);
+      widgetRef.current?.play();
+    };
+
     const handleReady = () => {
       widget.getSounds((nextSounds) => {
-        // Prevent overwriting the full playlist if widget.load() was used (which returns only 1 track)
         if (!nextSounds?.length || (soundsRef.current.length > 0 && nextSounds.length < soundsRef.current.length)) {
           return;
         }
 
         soundsRef.current = nextSounds;
-        const playableIndexes = nextSounds.reduce((indexes, sound, index) => {
-          if (sound.streamable !== false && sound.policy !== "BLOCK") {
-            indexes.push(index);
-          }
-
-          return indexes;
-        }, []);
-        const randomIndex =
-          playableIndexes[
-            Math.floor(Math.random() * playableIndexes.length)
-          ] ?? 0;
-        currentIndexRef.current = randomIndex;
-        currentTimeRef.current = 0;
         setSounds(nextSounds);
-        setCurrentIndex(randomIndex);
-        setCurrentTrack(nextSounds[randomIndex]);
-        setCurrentTime(0);
-        widgetRef.current?.skip(randomIndex);
-        widgetRef.current?.play();
+        initPlayer(nextSounds, false);
 
         [400, 1000, 2000, 4000].forEach((delay) => {
           refreshTimers.push(
@@ -165,6 +191,10 @@ const SoundCloudPlayerProvider = ({ children }) => {
                 if (refreshedSounds?.length > soundsRef.current.length) {
                   soundsRef.current = refreshedSounds;
                   setSounds(refreshedSounds);
+                  initPlayer(refreshedSounds, false);
+                } else if (delay === 4000) {
+                  // Force initialization on the last timer if it hasn't happened yet
+                  initPlayer(soundsRef.current, true);
                 }
               });
             }, delay)
@@ -231,7 +261,9 @@ const SoundCloudPlayerProvider = ({ children }) => {
         setCurrentTrack(soundsRef.current[nextIndex]);
         setCurrentTime(0);
         widget.skip(nextIndex);
-        widget.play();
+        if (isPlayingRef.current) {
+          widget.play();
+        }
       }
     };
     const handleFinish = () => {

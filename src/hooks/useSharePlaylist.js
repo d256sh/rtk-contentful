@@ -8,7 +8,7 @@ const encodePlaylist = (ids) => {
   return `#${HASH_KEY}=${ids.join(",")}`;
 };
 
-const decodePlaylist = (hash) => {
+export const decodePlaylist = (hash) => {
   if (!hash) return [];
 
   const params = new URLSearchParams(hash.replace(/^#/, ""));
