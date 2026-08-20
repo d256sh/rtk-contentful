@@ -70,3 +70,12 @@ export const pauseOtherVideos = (currentVideo) => {
     notifyMediaPlayback();
   }
 };
+
+export const PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='100%25' height='100%25'%3E%3Crect width='24' height='24' fill='%231a1a1a'/%3E%3Cpath d='M9 18V5l12-2v13' stroke='%23555' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Ccircle cx='6' cy='18' r='3' fill='none' stroke='%23555' stroke-width='1.5'/%3E%3Ccircle cx='18' cy='16' r='3' fill='none' stroke='%23555' stroke-width='1.5'/%3E%3C/svg%3E";
+
+export const handleImageError = (e) => {
+  if (e.target.src !== PLACEHOLDER_IMAGE) {
+    e.target.onerror = null;
+    e.target.src = PLACEHOLDER_IMAGE;
+  }
+};

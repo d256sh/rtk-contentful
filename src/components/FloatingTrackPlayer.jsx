@@ -2,6 +2,7 @@ import React from "react";
 import Icon from "./Icon";
 import { useSoundCloudPlayer } from "./SoundCloudPlayerProvider";
 import { useSharePlaylist } from "../hooks/useSharePlaylist";
+import { handleImageError, PLACEHOLDER_IMAGE } from "../utils/common";
 
 const formatTime = (milliseconds) => {
   const totalSeconds = Math.floor(milliseconds / 1000);
@@ -35,11 +36,12 @@ const FloatingTrackPlayer = () => {
 
   return (
     <aside className="floating-player" aria-label="SoundCloud player">
-      {artwork ? (
-        <img src={artwork} alt="" className="floating-player__cover" />
-      ) : (
-        <div className="floating-player__cover" />
-      )}
+      <img 
+        src={artwork || PLACEHOLDER_IMAGE} 
+        alt="" 
+        className="floating-player__cover" 
+        onError={handleImageError}
+      />
 
       <div className="floating-player__main">
         <a

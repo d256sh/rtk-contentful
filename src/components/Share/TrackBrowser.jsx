@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import Icon from "../Icon";
 import { useSoundCloudPlayer } from "../SoundCloudPlayerProvider";
+import { handleImageError, PLACEHOLDER_IMAGE } from "../../utils/common";
 
 const SearchIcon = () => (
   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -96,11 +97,12 @@ const TrackBrowser = ({ hasTrack, onAdd, onRemove }) => {
                 onClick={() => (isCurrent ? toggle() : selectTrack(index))}
                 aria-label={isCurrent && isPlaying ? "Pause" : "Play"}
               >
-                {artwork ? (
-                  <img src={artwork} alt="" className="share-browser__cover" />
-                ) : (
-                  <div className="share-browser__cover share-browser__cover--empty" />
-                )}
+                <img 
+                  src={artwork || PLACEHOLDER_IMAGE} 
+                  alt="" 
+                  className="share-browser__cover" 
+                  onError={handleImageError}
+                />
                 <span className="share-browser__play-icon">
                   <Icon name={isCurrent && isPlaying ? "pause" : "play"} />
                 </span>

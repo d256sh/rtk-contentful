@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import Icon from "../Icon";
 import { useSoundCloudPlayer } from "../SoundCloudPlayerProvider";
+import { handleImageError, PLACEHOLDER_IMAGE } from "../../utils/common";
 
 const CustomPlaylist = ({ selectedIds, sounds, onRemove, onMove, onClear }) => {
   const { currentIndex, isPlaying, selectTrack, toggle } = useSoundCloudPlayer();
@@ -106,11 +107,12 @@ const CustomPlaylist = ({ selectedIds, sounds, onRemove, onMove, onClear }) => {
                 onClick={() => (isCurrent ? toggle() : selectTrack(soundIndex))}
                 aria-label={isCurrent && isPlaying ? "Pause" : "Play"}
               >
-                {artwork ? (
-                  <img src={artwork} alt="" className="share-playlist__cover" />
-                ) : (
-                  <div className="share-playlist__cover share-playlist__cover--empty" />
-                )}
+                <img 
+                  src={artwork || PLACEHOLDER_IMAGE} 
+                  alt="" 
+                  className="share-playlist__cover" 
+                  onError={handleImageError}
+                />
                 <span className="share-playlist__play-icon">
                   <Icon name={isCurrent && isPlaying ? "pause" : "play"} />
                 </span>
